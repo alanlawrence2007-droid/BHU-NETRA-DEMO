@@ -232,6 +232,86 @@ table{width:100%; border-collapse:collapse; font-size:0.86rem;}
 th{text-align:left; color:var(--muted); font-weight:500; padding:10px 12px; border-bottom:1px solid var(--border); font-size:0.78rem; text-transform:uppercase; letter-spacing:.03em;}
 td{padding:12px; border-bottom:1px solid var(--border);}
 tr:last-child td{border-bottom:none;}
+
+/* ============================================================
+   WHAT-IF SIMULATOR — scoped styles (prefix: .wis-)
+   Reuses the app's existing CSS variables (--bg-elev, --border,
+   --text, --muted, --accent, --font-head, --font-body, --radius,
+   --green, --amber, --red) so it matches the current theme
+   automatically, including light/dark mode.
+   ============================================================ */
+.wis-container{
+  --wis-yellow: var(--amber, #D9A441);
+  --wis-orange: #E08A3C;
+  font-family: var(--font-body);
+  color: var(--text);
+}
+.wis-container *{ box-sizing: border-box; }
+
+.wis-header{ margin-bottom: 18px; }
+.wis-title{ font-family: var(--font-head); font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 4px; }
+.wis-subtitle{ color: var(--muted); font-size: 0.88rem; margin: 0; }
+
+.wis-zone-row{ display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.wis-zone-chip{
+  font-family: inherit; cursor: pointer; background: var(--bg-elev); color: var(--text);
+  border: 1px solid var(--border); border-radius: 20px; padding: 8px 16px; font-size: 0.85rem; font-weight: 600; transition: .15s;
+}
+.wis-zone-chip:hover{ filter: brightness(1.1); }
+.wis-zone-chip.active{ background: var(--accent); color: #0B1712; border-color: var(--accent); }
+
+.wis-presets{ display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.wis-preset-btn{
+  font-family: inherit; cursor: pointer; background: transparent; color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 0.82rem; font-weight: 600; transition: .15s;
+}
+.wis-preset-btn:hover{ background: var(--bg-elev2); }
+.wis-preset-btn:active{ transform: scale(0.97); }
+
+.wis-body{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+@media (max-width: 760px){ .wis-body{ grid-template-columns: 1fr; } }
+
+.wis-card{ background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+.wis-card-title{ font-family: var(--font-head); font-size: 0.95rem; font-weight: 600; margin: 0 0 14px; }
+
+.wis-slider-group{ margin-bottom: 18px; }
+.wis-slider-group:last-child{ margin-bottom: 0; }
+.wis-slider-label{ display: flex; justify-content: space-between; align-items: baseline; font-size: 0.84rem; margin-bottom: 8px; }
+.wis-slider-label span:first-child{ color: var(--muted); }
+.wis-slider-value{ font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+
+.wis-slider{ -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: var(--border); outline: none; cursor: pointer; }
+.wis-slider::-webkit-slider-thumb{ -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg-elev); cursor: pointer; box-shadow: 0 0 0 1px var(--border); }
+.wis-slider::-moz-range-thumb{ width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--bg-elev); background: var(--accent); cursor: pointer; }
+
+.wis-outputs{ display: flex; flex-direction: column; gap: 16px; }
+
+.wis-risk-display{ display: flex; align-items: center; gap: 20px; }
+.wis-risk-number{ font-family: var(--font-head); font-size: 2.6rem; font-weight: 700; line-height: 1; color: var(--wis-risk-color, var(--green)); }
+.wis-risk-meta{ flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.wis-badge{ display: inline-flex; align-self: flex-start; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; padding: 4px 12px; border-radius: 20px; background: var(--wis-risk-color, var(--green)); color: #0B1712; }
+.wis-risk-bar-track{ height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; }
+.wis-risk-bar-fill{ height: 100%; width: 0%; border-radius: 4px; background: var(--wis-risk-color, var(--green)); transition: width .25s ease, background .25s ease; }
+
+.wis-timeline{ display: flex; justify-content: space-between; gap: 10px; }
+.wis-timeline-point{ flex: 1; text-align: center; background: var(--bg-elev2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 6px; }
+.wis-timeline-label{ font-size: 0.74rem; color: var(--muted); margin-bottom: 4px; }
+.wis-timeline-value{ font-family: var(--font-head); font-size: 1.15rem; font-weight: 700; }
+
+.wis-contributors{ display: flex; flex-direction: column; gap: 12px; }
+.wis-contributor{ display: flex; flex-direction: column; gap: 5px; }
+.wis-contributor-top{ display: flex; justify-content: space-between; font-size: 0.82rem; }
+.wis-contributor-name{ color: var(--text); font-weight: 600; }
+.wis-contributor-pct{ color: var(--muted); font-variant-numeric: tabular-nums; }
+.wis-contributor-bar-track{ height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
+.wis-contributor-bar-fill{ height: 100%; border-radius: 3px; background: var(--accent); transition: width .25s ease; }
+
+.wis-apply-row{ display: flex; align-items: center; gap: 14px; margin-top: 20px; flex-wrap: wrap; }
+.wis-apply-btn{ font-family: inherit; cursor: pointer; background: var(--text); color: var(--bg-elev); border: none; border-radius: 8px; padding: 12px 26px; font-weight: 600; font-size: 0.9rem; transition: filter .15s; }
+.wis-apply-btn:hover{ filter: brightness(1.08); }
+.wis-apply-btn:active{ transform: scale(0.98); }
+.wis-apply-status{ font-size: 0.82rem; color: var(--accent); opacity: 0; transition: opacity .2s; }
+.wis-apply-status.wis-show{ opacity: 1; }
 </style>
 </head>
 <body>
@@ -472,6 +552,102 @@ tr:last-child td{border-bottom:none;}
 </section>
 
 <!-- ============================= COMMUNITY ============================= -->
+<!-- ============================= WHAT-IF SIMULATOR ============================= -->
+<section class="page" id="page-what-if">
+  <div class="wrap section">
+    <div class="section-head">
+      <div class="kicker" data-i18n="What-If Simulator">What-If Simulator</div>
+      <h1 style="font-size:1.9rem;" data-i18n="Explore how conditions change risk">Explore how conditions change risk</h1>
+      <div class="rule"></div>
+    </div>
+
+    <!-- ============================================================
+         WHAT-IF SIMULATOR — self-contained module
+         Reads from / writes to window.landslideApp (defined in the
+         DATA section of the main script below), not a separate app.
+         ============================================================ -->
+    <div class="wis-container" id="wis-root">
+
+      <div class="wis-zone-row" id="wis-zone-row" role="tablist" aria-label="Select zone"></div>
+
+      <div class="wis-presets">
+        <button type="button" class="wis-preset-btn" data-preset="normal">Normal</button>
+        <button type="button" class="wis-preset-btn" data-preset="heavyRain">Heavy Rain</button>
+        <button type="button" class="wis-preset-btn" data-preset="cloudburst">Cloudburst</button>
+        <button type="button" class="wis-preset-btn" data-preset="saturatedSoil">Saturated Soil</button>
+        <button type="button" class="wis-preset-btn" data-preset="roadCut">Road Cut</button>
+      </div>
+
+      <div class="wis-body">
+
+        <div class="wis-card wis-sliders">
+          <h3 class="wis-card-title">Conditions</h3>
+
+          <div class="wis-slider-group">
+            <div class="wis-slider-label"><span>Rainfall intensity</span><span class="wis-slider-value" id="wis-val-rainfall">0 mm/hr</span></div>
+            <input type="range" id="wis-rainfall" min="0" max="120" step="1" value="0" class="wis-slider">
+          </div>
+
+          <div class="wis-slider-group">
+            <div class="wis-slider-label"><span>Forecast duration</span><span class="wis-slider-value" id="wis-val-duration">0 h</span></div>
+            <input type="range" id="wis-duration" min="0" max="24" step="1" value="0" class="wis-slider">
+          </div>
+
+          <div class="wis-slider-group">
+            <div class="wis-slider-label"><span>Antecedent soil moisture</span><span class="wis-slider-value" id="wis-val-moisture">0%</span></div>
+            <input type="range" id="wis-moisture" min="0" max="100" step="1" value="0" class="wis-slider">
+          </div>
+
+          <div class="wis-slider-group">
+            <div class="wis-slider-label"><span>Slope angle</span><span class="wis-slider-value" id="wis-val-slope">0°</span></div>
+            <input type="range" id="wis-slope" min="0" max="60" step="1" value="0" class="wis-slider">
+          </div>
+
+          <div class="wis-slider-group">
+            <div class="wis-slider-label"><span>Vegetation cover</span><span class="wis-slider-value" id="wis-val-vegetation">0%</span></div>
+            <input type="range" id="wis-vegetation" min="0" max="100" step="1" value="0" class="wis-slider">
+          </div>
+        </div>
+
+        <div class="wis-outputs">
+
+          <div class="wis-card wis-risk-card">
+            <h3 class="wis-card-title">Risk score</h3>
+            <div class="wis-risk-display">
+              <div class="wis-risk-number" id="wis-risk-score">0</div>
+              <div class="wis-risk-meta">
+                <span class="wis-badge" id="wis-alert-badge">Monitor</span>
+                <div class="wis-risk-bar-track"><div class="wis-risk-bar-fill" id="wis-risk-bar"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wis-card wis-timeline-card">
+            <h3 class="wis-card-title">Mini timeline</h3>
+            <div class="wis-timeline">
+              <div class="wis-timeline-point"><div class="wis-timeline-label">Now</div><div class="wis-timeline-value" id="wis-tl-now">0</div></div>
+              <div class="wis-timeline-point"><div class="wis-timeline-label">+3h</div><div class="wis-timeline-value" id="wis-tl-3h">0</div></div>
+              <div class="wis-timeline-point"><div class="wis-timeline-label">+6h</div><div class="wis-timeline-value" id="wis-tl-6h">0</div></div>
+            </div>
+          </div>
+
+          <div class="wis-card wis-explain-card">
+            <h3 class="wis-card-title">Top contributors</h3>
+            <div class="wis-contributors" id="wis-contributors"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="wis-apply-row">
+        <button type="button" class="wis-apply-btn" id="wis-apply-btn">Apply to App</button>
+        <span class="wis-apply-status" id="wis-apply-status"></span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <section class="page" id="page-community">
   <div class="wrap section">
     <div class="section-head">
@@ -540,16 +716,72 @@ tr:last-child td{border-bottom:none;}
 <script>
 /* ============================= DATA ============================= */
 const DISTRICTS = [
-  {id:'darjeeling', name:'Darjeeling', state:'West Bengal', lat:27.0410, lng:88.2636, tierA:'Watch', tierB:'Stable', rainfall:'62 mm/24h', updated:'8 min ago'},
-  {id:'kalimpong', name:'Kalimpong', state:'West Bengal', lat:27.0669, lng:88.4711, tierA:'Warning', tierB:'Watch', rainfall:'94 mm/24h', updated:'4 min ago'},
-  {id:'wayanad', name:'Wayanad', state:'Kerala', lat:11.6854, lng:76.1320, tierA:'Watch', tierB:'Stable', rainfall:'48 mm/24h', updated:'12 min ago'},
-  {id:'idukki', name:'Idukki', state:'Kerala', lat:9.8490, lng:77.1100, tierA:'Stable', tierB:'Stable', rainfall:'21 mm/24h', updated:'15 min ago'},
-  {id:'munsiyari', name:'Munsiyari', state:'Uttarakhand', lat:30.0668, lng:80.2373, tierA:'Watch', tierB:'Stable', rainfall:'55 mm/24h', updated:'6 min ago'},
-  {id:'gangtok', name:'Gangtok', state:'Sikkim', lat:27.3389, lng:88.6065, tierA:'Stable', tierB:'Stable', rainfall:'18 mm/24h', updated:'20 min ago'},
-  {id:'shillong', name:'Shillong', state:'Meghalaya', lat:25.5788, lng:91.8933, tierA:'Warning', tierB:'Watch', rainfall:'101 mm/24h', updated:'3 min ago'},
-  {id:'itanagar', name:'Itanagar', state:'Arunachal Pradesh', lat:27.0844, lng:93.6053, tierA:'Stable', tierB:'Stable', rainfall:'14 mm/24h', updated:'25 min ago'},
-  {id:'shimla', name:'Shimla', state:'Himachal Pradesh', lat:31.1048, lng:77.1734, tierA:'Watch', tierB:'Stable', rainfall:'38 mm/24h', updated:'10 min ago'}
+  {id:'darjeeling', name:'Darjeeling', state:'West Bengal', lat:27.0410, lng:88.2636, tierA:'Watch', tierB:'Stable', rainfall:'62 mm/24h', updated:'8 min ago', baseSlope:34, baseVegetation:55},
+  {id:'kalimpong', name:'Kalimpong', state:'West Bengal', lat:27.0669, lng:88.4711, tierA:'Warning', tierB:'Watch', rainfall:'94 mm/24h', updated:'4 min ago', baseSlope:38, baseVegetation:45},
+  {id:'wayanad', name:'Wayanad', state:'Kerala', lat:11.6854, lng:76.1320, tierA:'Watch', tierB:'Stable', rainfall:'48 mm/24h', updated:'12 min ago', baseSlope:28, baseVegetation:65},
+  {id:'idukki', name:'Idukki', state:'Kerala', lat:9.8490, lng:77.1100, tierA:'Stable', tierB:'Stable', rainfall:'21 mm/24h', updated:'15 min ago', baseSlope:22, baseVegetation:72},
+  {id:'munsiyari', name:'Munsiyari', state:'Uttarakhand', lat:30.0668, lng:80.2373, tierA:'Watch', tierB:'Stable', rainfall:'55 mm/24h', updated:'6 min ago', baseSlope:41, baseVegetation:38},
+  {id:'gangtok', name:'Gangtok', state:'Sikkim', lat:27.3389, lng:88.6065, tierA:'Stable', tierB:'Stable', rainfall:'18 mm/24h', updated:'20 min ago', baseSlope:30, baseVegetation:60},
+  {id:'shillong', name:'Shillong', state:'Meghalaya', lat:25.5788, lng:91.8933, tierA:'Warning', tierB:'Watch', rainfall:'101 mm/24h', updated:'3 min ago', baseSlope:26, baseVegetation:50},
+  {id:'itanagar', name:'Itanagar', state:'Arunachal Pradesh', lat:27.0844, lng:93.6053, tierA:'Stable', tierB:'Stable', rainfall:'14 mm/24h', updated:'25 min ago', baseSlope:24, baseVegetation:70},
+  {id:'shimla', name:'Shimla', state:'Himachal Pradesh', lat:31.1048, lng:77.1734, tierA:'Watch', tierB:'Stable', rainfall:'38 mm/24h', updated:'10 min ago', baseSlope:33, baseVegetation:48}
 ];
+
+/* ============================================================
+   WHAT-IF SIMULATOR — app bridge
+   Exposes window.landslideApp on top of the existing DISTRICTS
+   array (no duplicate data store). tierA is mapped to a rough
+   0-100 baseRisk just for the simulator's starting point.
+   ============================================================ */
+const tierToBaseRisk = t => t === 'Warning' ? 75 : t === 'Watch' ? 45 : 15;
+// Reverse mapping: simulator's 4-level alert -> the app's existing 3-level tier vocabulary.
+const whatIfAlertToTier = level => {
+  if (level === 'Monitor') return 'Stable';
+  if (level === 'Prepare') return 'Watch';
+  return 'Warning'; // Restrict and Act both escalate to the app's top tier
+};
+
+let _currentZoneId = 'kalimpong'; // mirrors the dashboard's primary location
+
+window.landslideApp = {
+  get zones(){
+    return DISTRICTS.map(d => ({
+      id: d.id,
+      name: d.name,
+      lat: d.lat,
+      lng: d.lng,
+      baseSlope: d.baseSlope,
+      baseVegetation: d.baseVegetation,
+      baseRisk: tierToBaseRisk(d.tierA)
+    }));
+  },
+  getCurrentZone(){ return _currentZoneId; },
+  updateZoneRisk(zoneId, riskScore, alertLevel){
+    const d = DISTRICTS.find(x => x.id === zoneId);
+    if (!d) return;
+    d.tierA = whatIfAlertToTier(alertLevel);
+    d.updated = 'just now';
+    d._whatIfRiskScore = riskScore;
+    d._whatIfAlertLevel = alertLevel;
+
+    // Reflect the change wherever this zone is currently visible,
+    // without a full page reload.
+    const hash = (location.hash || '#home').replace('#','');
+    if (hash === 'dashboard') renderDashboard();
+    if (hash === 'alerts') renderAlerts(currentAlertFilter);
+    const marker = window._districtMarkers && window._districtMarkers[zoneId];
+    if (marker){
+      marker.setStyle({ fillColor: riskHex(d.tierA) });
+      marker.setPopupContent(`
+        <div class="popup-title">${d.name}, ${d.state}</div>
+        <div style="font-size:12px; margin-bottom:4px;">24hr outlook: <strong>${d.tierA}</strong></div>
+        <div style="font-size:12px; margin-bottom:4px;">1hr nowcast: <strong>${d.tierB}</strong></div>
+        <div style="font-size:12px; margin-bottom:4px;">Rainfall: ${d.rainfall}</div>
+        <div style="font-size:11px; color:#9CAFA2;">Updated ${d.updated}</div>
+      `);
+    }
+  }
+};
 
 const ALERTS = [
   {tier:'B', place:'Kalimpong', msg:'Rainfall intensity spiked and 2 nearby reports confirmed ground movement.', time:'4 min ago', level:'red'},
@@ -572,6 +804,7 @@ const ROUTES = [
   {id:'alerts', label:'Alerts'},
   {id:'safe-route', label:'Safe Route'},
   {id:'report', label:'Report'},
+  {id:'what-if', label:'What-If Simulator'},
   {id:'community', label:'Community'},
   {id:'authority', label:'Authority'},
   {id:'settings', label:'Settings'}
@@ -605,6 +838,7 @@ function render(){
   if(hash === 'alerts') renderAlerts(currentAlertFilter);
   if(hash === 'safe-route'){ initSafeMap(); setTimeout(()=>{ if(window._safeMap) window._safeMap.invalidateSize(); }, 50); }
   if(hash === 'report'){ initReportMap(); setTimeout(()=>{ if(window._reportMap) window._reportMap.invalidateSize(); }, 50); }
+  if(hash === 'what-if' && window.initWhatIfSimulator) window.initWhatIfSimulator();
   if(hash === 'community') renderCommunity();
   if(hash === 'authority') renderAuthority();
   if(hash === 'settings') renderSettings();
@@ -639,6 +873,7 @@ function initLeafletMap(){
     attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
   }).addTo(map);
 
+  window._districtMarkers = {};
   DISTRICTS.forEach(d => {
     const color = riskHex(d.tierA);
     const marker = L.circleMarker([d.lat, d.lng], {
@@ -651,6 +886,7 @@ function initLeafletMap(){
       <div style="font-size:12px; margin-bottom:4px;">Rainfall: ${d.rainfall}</div>
       <div style="font-size:11px; color:#9CAFA2;">Updated ${d.updated}</div>
     `);
+    window._districtMarkers[d.id] = marker; // tracked so the What-If Simulator can update markers live
   });
 }
 
@@ -970,6 +1206,264 @@ document.getElementById('lang-seg')?.addEventListener('click', function(e){
   if(e.target.tagName !== 'BUTTON') return;
   applyLanguage(e.target.getAttribute('data-lang'));
 });
+
+/* ============================================================
+   WHAT-IF SIMULATOR — engine (risk formula + DOM wiring)
+   Reads/writes window.landslideApp only — see the app bridge in
+   the DATA section above for how that maps onto DISTRICTS.
+   ============================================================ */
+(function(){
+
+  let state = {
+    zoneId: null,
+    rainfall: 0,     // mm/hr, 0-120
+    duration: 0,     // hours, 0-24
+    moisture: 0,     // % saturation, 0-100
+    slope: 0,        // degrees, 0-60
+    vegetation: 0    // % cover, 0-100
+  };
+
+  // Preset scenario buttons — edit these to tune what each button sets.
+  const PRESETS = {
+    normal:        { rainfall: 5,   duration: 2,  moisture: 25, slope: 20, vegetation: 60 },
+    heavyRain:     { rainfall: 45,  duration: 6,  moisture: 55, slope: 25, vegetation: 45 },
+    cloudburst:    { rainfall: 100, duration: 2,  moisture: 60, slope: 30, vegetation: 40 },
+    saturatedSoil: { rainfall: 20,  duration: 8,  moisture: 90, slope: 22, vegetation: 40 },
+    roadCut:       { rainfall: 15,  duration: 4,  moisture: 40, slope: 45, vegetation: 15 }
+  };
+
+  // ==========================================================================
+  // RISK FORMULA — core logic. Replace/tune this section to connect to a
+  // real model or API later (see "CONNECTING TO REAL APIS" below).
+  // ==========================================================================
+  function computeRisk(inputs){
+    const { rainfall, duration, moisture, slope, vegetation } = inputs;
+
+    // 1. Trigger risk: rainfall + duration combine, then antecedent soil
+    // moisture amplifies it — already-wet ground fails faster.
+    const rainFactor = Math.min(rainfall / 100, 1);
+    const durationFactor = Math.min(duration / 12, 1);
+    const moistureFactor = moisture / 100;
+    const triggerRisk = (rainFactor * 0.6 + durationFactor * 0.4) * 60 + moistureFactor * 40;
+
+    // 2. Susceptibility: steeper slope = more susceptible; vegetation
+    // cover reduces it (roots bind soil).
+    const slopeFactor = Math.min(slope / 45, 1);
+    const vegProtection = vegetation / 100;
+    const susceptibility = slopeFactor * 70 + (1 - vegProtection) * 30;
+
+    // 3. Combine into final risk (weighted blend — tune weights here).
+    const TRIGGER_WEIGHT = 0.55;
+    const SUSCEPTIBILITY_WEIGHT = 0.45;
+    let finalRisk = triggerRisk * TRIGGER_WEIGHT + susceptibility * SUSCEPTIBILITY_WEIGHT;
+    finalRisk = Math.max(0, Math.min(100, Math.round(finalRisk)));
+
+    // 4. Alert level thresholds — CUSTOMIZE THRESHOLDS HERE.
+    let alertLevel, colorVar;
+    if (finalRisk <= 30)      { alertLevel = 'Monitor';  colorVar = 'var(--green)'; }
+    else if (finalRisk <= 60) { alertLevel = 'Prepare';  colorVar = 'var(--wis-yellow)'; }
+    else if (finalRisk <= 85) { alertLevel = 'Restrict'; colorVar = 'var(--wis-orange)'; }
+    else                       { alertLevel = 'Act';      colorVar = 'var(--red)'; }
+
+    // 5. Contribution scores for the explainability box.
+    const contributions = [
+      { name: 'High rainfall',  value: Math.round(rainFactor * 100) },
+      { name: 'Prolonged rain', value: Math.round(durationFactor * 100) },
+      { name: 'Saturated soil', value: Math.round(moistureFactor * 100) },
+      { name: 'Steep slope',    value: Math.round(slopeFactor * 100) },
+      { name: 'Low vegetation', value: Math.round((1 - vegProtection) * 100) }
+    ].sort((a, b) => b.value - a.value).slice(0, 3);
+
+    // 6. Simple Now / +3h / +6h timeline projection. Naive model: assumes
+    // rain keeps falling at the current intensity and soil moisture keeps
+    // climbing. Replace with a real forecast-driven projection later.
+    const moistureAt3h = Math.min(100, moisture + rainFactor * 15);
+    const moistureAt6h = Math.min(100, moisture + rainFactor * 28);
+    const projectedRisk = (projMoisture) => {
+      const mFactor = projMoisture / 100;
+      const trig = (rainFactor * 0.6 + durationFactor * 0.4) * 60 + mFactor * 40;
+      const susc = slopeFactor * 70 + (1 - vegProtection) * 30;
+      return Math.max(0, Math.min(100, Math.round(trig * TRIGGER_WEIGHT + susc * SUSCEPTIBILITY_WEIGHT)));
+    };
+    const timeline = { now: finalRisk, plus3h: projectedRisk(moistureAt3h), plus6h: projectedRisk(moistureAt6h) };
+
+    return { finalRisk, alertLevel, colorVar, contributions, timeline };
+  }
+
+  let els = {};
+  function cacheEls(){
+    els = {
+      zoneRow: document.getElementById('wis-zone-row'),
+      rainfall: document.getElementById('wis-rainfall'),
+      duration: document.getElementById('wis-duration'),
+      moisture: document.getElementById('wis-moisture'),
+      slope: document.getElementById('wis-slope'),
+      vegetation: document.getElementById('wis-vegetation'),
+      valRainfall: document.getElementById('wis-val-rainfall'),
+      valDuration: document.getElementById('wis-val-duration'),
+      valMoisture: document.getElementById('wis-val-moisture'),
+      valSlope: document.getElementById('wis-val-slope'),
+      valVegetation: document.getElementById('wis-val-vegetation'),
+      riskScore: document.getElementById('wis-risk-score'),
+      alertBadge: document.getElementById('wis-alert-badge'),
+      riskBar: document.getElementById('wis-risk-bar'),
+      tlNow: document.getElementById('wis-tl-now'),
+      tl3h: document.getElementById('wis-tl-3h'),
+      tl6h: document.getElementById('wis-tl-6h'),
+      contributors: document.getElementById('wis-contributors'),
+      applyBtn: document.getElementById('wis-apply-btn'),
+      applyStatus: document.getElementById('wis-apply-status'),
+      container: document.getElementById('wis-root')
+    };
+  }
+
+  function renderWis(){
+    if (!els.container) return null;
+    const result = computeRisk(state);
+
+    els.valRainfall.textContent = state.rainfall + ' mm/hr';
+    els.valDuration.textContent = state.duration + ' h';
+    els.valMoisture.textContent = state.moisture + '%';
+    els.valSlope.textContent = state.slope + '°';
+    els.valVegetation.textContent = state.vegetation + '%';
+
+    els.riskScore.textContent = result.finalRisk;
+    els.alertBadge.textContent = result.alertLevel;
+    els.riskBar.style.width = result.finalRisk + '%';
+    els.container.style.setProperty('--wis-risk-color', result.colorVar);
+
+    els.tlNow.textContent = result.timeline.now;
+    els.tl3h.textContent = result.timeline.plus3h;
+    els.tl6h.textContent = result.timeline.plus6h;
+
+    els.contributors.innerHTML = result.contributions.map(c => `
+      <div class="wis-contributor">
+        <div class="wis-contributor-top"><span class="wis-contributor-name">${c.name}</span><span class="wis-contributor-pct">${c.value}%</span></div>
+        <div class="wis-contributor-bar-track"><div class="wis-contributor-bar-fill" style="width:${c.value}%"></div></div>
+      </div>`).join('');
+
+    return result;
+  }
+
+  function loadZoneBaseline(zoneId){
+    const app = window.landslideApp;
+    if (!app || !Array.isArray(app.zones)) return;
+    const zone = app.zones.find(z => z.id === zoneId);
+    if (!zone) return;
+
+    state.zoneId = zoneId;
+    state.slope = zone.baseSlope ?? state.slope;
+    state.vegetation = zone.baseVegetation ?? state.vegetation;
+    state.rainfall = 0;
+    state.duration = 0;
+    state.moisture = 0;
+
+    syncSlidersToState();
+    highlightActiveZoneChip();
+    renderWis();
+  }
+
+  function syncSlidersToState(){
+    els.rainfall.value = state.rainfall;
+    els.duration.value = state.duration;
+    els.moisture.value = state.moisture;
+    els.slope.value = state.slope;
+    els.vegetation.value = state.vegetation;
+  }
+
+  function highlightActiveZoneChip(){
+    els.zoneRow.querySelectorAll('.wis-zone-chip').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.zoneId === state.zoneId);
+    });
+  }
+
+  function buildZoneRow(){
+    const app = window.landslideApp;
+    els.zoneRow.innerHTML = '';
+    if (!app || !Array.isArray(app.zones)) return;
+    app.zones.forEach(zone => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'wis-zone-chip';
+      btn.dataset.zoneId = zone.id;
+      btn.textContent = zone.name || zone.id;
+      btn.addEventListener('click', () => loadZoneBaseline(zone.id));
+      els.zoneRow.appendChild(btn);
+    });
+    highlightActiveZoneChip();
+  }
+
+  let wired = false;
+  function wireOnce(){
+    if (wired) return;
+    wired = true;
+
+    const sliderMap = [
+      ['rainfall', 'rainfall'], ['duration', 'duration'], ['moisture', 'moisture'],
+      ['slope', 'slope'], ['vegetation', 'vegetation']
+    ];
+    sliderMap.forEach(([elKey, stateKey]) => {
+      els[elKey].addEventListener('input', (e) => {
+        state[stateKey] = Number(e.target.value);
+        renderWis(); // recompute + update UI only — does NOT call updateZoneRisk
+      });
+    });
+
+    document.querySelectorAll('.wis-preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const preset = PRESETS[btn.dataset.preset];
+        if (!preset) return;
+        Object.assign(state, preset);
+        syncSlidersToState();
+        renderWis();
+      });
+    });
+
+    els.applyBtn.addEventListener('click', () => {
+      const result = renderWis();
+      const app = window.landslideApp;
+      if (!result) return;
+
+      // ====================================================================
+      // CONNECTING TO REAL APIS LATER: replace this direct call with a
+      // fetch()/await call to your backend if risk should be recomputed
+      // server-side, then call window.landslideApp.updateZoneRisk(...)
+      // with the server's response, e.g.:
+      //   const res = await fetch('/api/risk', { method:'POST', body: JSON.stringify(state) });
+      //   const data = await res.json();
+      //   app.updateZoneRisk(state.zoneId, data.riskScore, data.alertLevel);
+      // ====================================================================
+      if (app && typeof app.updateZoneRisk === 'function' && state.zoneId) {
+        app.updateZoneRisk(state.zoneId, result.finalRisk, result.alertLevel);
+        els.applyStatus.textContent = `Applied to ${state.zoneId} — risk ${result.finalRisk} (${result.alertLevel})`;
+      } else {
+        els.applyStatus.textContent = 'Could not apply — landslideApp.updateZoneRisk not available.';
+      }
+      els.applyStatus.classList.add('wis-show');
+      clearTimeout(wireOnce._t);
+      wireOnce._t = setTimeout(() => els.applyStatus.classList.remove('wis-show'), 3500);
+    });
+  }
+
+  // Public entry point — safe to call multiple times (e.g. every time the
+  // user navigates to the What-If Simulator page); wiring only attaches once.
+  window.initWhatIfSimulator = function(){
+    cacheEls();
+    if (!els.container) return;
+    wireOnce();
+    buildZoneRow();
+
+    const app = window.landslideApp;
+    if (!state.zoneId) {
+      const startZoneId = (app && typeof app.getCurrentZone === 'function' && app.getCurrentZone())
+        || (app && Array.isArray(app.zones) && app.zones[0] && app.zones[0].id)
+        || null;
+      if (startZoneId) { loadZoneBaseline(startZoneId); return; }
+    }
+    renderWis();
+  };
+
+})();
 
 /* ============================= MOBILE NAV ============================= */
 document.getElementById('hamburger-btn').addEventListener('click', function(){
