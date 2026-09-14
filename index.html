@@ -96,10 +96,11 @@ html[data-theme="light"] .hero-photo::after{
 @media (max-width:900px){ .grid-3,.grid-4{grid-template-columns:1fr 1fr;} }
 @media (max-width:620px){ .grid-3,.grid-4,.grid-2{grid-template-columns:1fr;} }
 
-.safe-route-grid{ grid-template-columns:1fr 320px; }
+/* Safe route always renders stacked/mobile-style — avoids the squished 2-col glitch on narrow screens */
+.safe-route-grid{ grid-template-columns:1fr; }
 .report-grid{ grid-template-columns:1fr 1fr; }
 @media (max-width:760px){
-  .safe-route-grid, .report-grid{ grid-template-columns:1fr; }
+  .report-grid{ grid-template-columns:1fr; }
 }
 
 /* Safety net: never allow any element to force horizontal overflow on mobile */
@@ -107,6 +108,8 @@ html, body{ overflow-x:hidden; max-width:100%; }
 img, table{ max-width:100%; }
 
 @media (max-width:520px){
+  html{ zoom:0.85; }
+  #page-home .hero-photo{ min-height:440px; }
   .wrap{ padding:0 18px; }
   .section{ padding-top:36px; padding-bottom:36px; }
   #page-home .hero-body{ padding-top:44px; padding-bottom:40px; }
@@ -257,66 +260,66 @@ tr:last-child td{border-bottom:none;}
   <div class="hero-photo" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Panoramic%20view%20from%20hill%20in%20Shimla.jpg?width=1800');">
     <div class="wrap hero-content hero-body">
       <div style="display:flex; align-items:center; gap:9px; color:var(--muted); font-size:0.86rem; margin-bottom:20px;">
-        <span class="live-pulse"></span> Live across 9 hill districts · updated every few minutes
+        <span class="live-pulse"></span> <span data-i18n="Live across 9 hill districts · updated every few minutes">Live across 9 hill districts · updated every few minutes</span>
       </div>
-      <h1>Know if your hillside is safe, before the rain decides for you.</h1>
-      <p class="lede">BHU-NETRA watches rainfall, ground movement, and reports from your neighbours to warn you up to a day in advance — and in the final hour, when it matters most.</p>
+      <h1 data-i18n="Know if your hillside is safe, before the rain decides for you.">Know if your hillside is safe, before the rain decides for you.</h1>
+      <p class="lede" data-i18n="BHU-NETRA watches rainfall, ground movement, and reports from your neighbours to warn you up to a day in advance — and in the final hour, when it matters most.">BHU-NETRA watches rainfall, ground movement, and reports from your neighbours to warn you up to a day in advance — and in the final hour, when it matters most.</p>
       <div style="display:flex; gap:14px; flex-wrap:wrap;">
-        <a href="#dashboard" class="btn btn-accent">Check my area</a>
-        <a href="#map" class="btn btn-secondary" style="background:rgba(255,255,255,0.05);">View live map</a>
+        <a href="#dashboard" class="btn btn-accent" data-i18n="Check my area">Check my area</a>
+        <a href="#map" class="btn btn-secondary" style="background:rgba(255,255,255,0.05);" data-i18n="View live map">View live map</a>
       </div>
       <div class="trust-strip">
-        <div class="trust-item"><div class="num">9</div><div class="lbl">regions monitored</div></div>
-        <div class="trust-item"><div class="num">24 hr</div><div class="lbl">earliest warning</div></div>
-        <div class="trust-item"><div class="num">&lt;1 hr</div><div class="lbl">imminent nowcast</div></div>
-        <div class="trust-item"><div class="num">0</div><div class="lbl">hardware sensors needed</div></div>
+        <div class="trust-item"><div class="num">9</div><div class="lbl" data-i18n="regions monitored">regions monitored</div></div>
+        <div class="trust-item"><div class="num">24 hr</div><div class="lbl" data-i18n="earliest warning">earliest warning</div></div>
+        <div class="trust-item"><div class="num">&lt;1 hr</div><div class="lbl" data-i18n="imminent nowcast">imminent nowcast</div></div>
+        <div class="trust-item"><div class="num">0</div><div class="lbl" data-i18n="hardware sensors needed">hardware sensors needed</div></div>
       </div>
     </div>
   </div>
 
   <div class="wrap section">
     <div class="section-head">
-      <div class="kicker">What makes this different</div>
-      <h2>Most warning systems tell you a district is at risk. This tells you what to do about it.</h2>
+      <div class="kicker" data-i18n="What makes this different">What makes this different</div>
+      <h2 data-i18n="Most warning systems tell you a district is at risk. This tells you what to do about it.">Most warning systems tell you a district is at risk. This tells you what to do about it.</h2>
       <div class="rule"></div>
     </div>
     <div class="grid grid-3">
       <div class="card">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none"><path d="M3 18 L9 8 L13 14 L17 7 L21 18" stroke="var(--text)" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M3 14 Q 8 11 13 13 T 21 12" stroke="var(--green)" stroke-width="1.4" fill="none"/></svg>
-        <h3 style="margin-bottom:8px; font-size:1.05rem;">24-hour outlook</h3>
-        <p style="color:var(--muted); font-size:0.9rem;">Rainfall trends, soil moisture, and terrain history combine into a day-ahead risk score for every hillside, not just instrumented districts.</p>
+        <h3 style="margin-bottom:8px; font-size:1.05rem;" data-i18n="24-hour outlook">24-hour outlook</h3>
+        <p style="color:var(--muted); font-size:0.9rem;" data-i18n="Rainfall trends, soil moisture, and terrain history combine into a day-ahead risk score for every hillside, not just instrumented districts.">Rainfall trends, soil moisture, and terrain history combine into a day-ahead risk score for every hillside, not just instrumented districts.</p>
       </div>
       <div class="card">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="var(--amber)" stroke-width="1.6"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke="var(--amber)" stroke-width="1.6"/></svg>
-        <h3 style="margin-bottom:8px; font-size:1.05rem;">Under-1-hour nowcast</h3>
-        <p style="color:var(--muted); font-size:0.9rem;">When rainfall spikes on ground that's already shifting and neighbours report cracks, the system escalates immediately.</p>
+        <h3 style="margin-bottom:8px; font-size:1.05rem;" data-i18n="Under-1-hour nowcast">Under-1-hour nowcast</h3>
+        <p style="color:var(--muted); font-size:0.9rem;" data-i18n="When rainfall spikes on ground that's already shifting and neighbours report cracks, the system escalates immediately.">When rainfall spikes on ground that's already shifting and neighbours report cracks, the system escalates immediately.</p>
       </div>
       <div class="card">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none"><path d="M5 21 L5 10 L12 4 L19 10 L19 21 Z" stroke="var(--accent)" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M9 21 v-6 h6 v6" stroke="var(--accent)" stroke-width="1.6"/></svg>
-        <h3 style="margin-bottom:8px; font-size:1.05rem;">A place to actually go</h3>
-        <p style="color:var(--muted); font-size:0.9rem;">Every alert comes with a route to the nearest verified safe zone, avoiding roads neighbours have marked blocked.</p>
+        <h3 style="margin-bottom:8px; font-size:1.05rem;" data-i18n="A place to actually go">A place to actually go</h3>
+        <p style="color:var(--muted); font-size:0.9rem;" data-i18n="Every alert comes with a route to the nearest verified safe zone, avoiding roads neighbours have marked blocked.">Every alert comes with a route to the nearest verified safe zone, avoiding roads neighbours have marked blocked.</p>
       </div>
     </div>
   </div>
 
   <div class="wrap section" style="padding-top:0;">
     <div class="section-head">
-      <div class="kicker">How it works</div>
-      <h2>From satellite to your phone, in four steps.</h2>
+      <div class="kicker" data-i18n="How it works">How it works</div>
+      <h2 data-i18n="From satellite to your phone, in four steps.">From satellite to your phone, in four steps.</h2>
       <div class="rule"></div>
     </div>
     <div class="grid grid-4">
-      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">01</div><h3 style="font-size:0.98rem; margin-bottom:6px;">Data comes in</h3><p style="font-size:0.85rem; color:var(--muted);">Free satellite rainfall and ground-movement data, refreshed continuously.</p></div>
-      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">02</div><h3 style="font-size:0.98rem; margin-bottom:6px;">Risk is scored</h3><p style="font-size:0.85rem; color:var(--muted);">A model trained on historical landslide records turns data into a live risk level.</p></div>
-      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">03</div><h3 style="font-size:0.98rem; margin-bottom:6px;">Neighbours confirm</h3><p style="font-size:0.85rem; color:var(--muted);">Citizen reports of cracks or movement sharpen the alert in real time.</p></div>
-      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">04</div><h3 style="font-size:0.98rem; margin-bottom:6px;">You're notified</h3><p style="font-size:0.85rem; color:var(--muted);">Push, SMS, or a call — with a route to safety attached.</p></div>
+      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">01</div><h3 style="font-size:0.98rem; margin-bottom:6px;" data-i18n="Data comes in">Data comes in</h3><p style="font-size:0.85rem; color:var(--muted);" data-i18n="Free satellite rainfall and ground-movement data, refreshed continuously.">Free satellite rainfall and ground-movement data, refreshed continuously.</p></div>
+      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">02</div><h3 style="font-size:0.98rem; margin-bottom:6px;" data-i18n="Risk is scored">Risk is scored</h3><p style="font-size:0.85rem; color:var(--muted);" data-i18n="A model trained on historical landslide records turns data into a live risk level.">A model trained on historical landslide records turns data into a live risk level.</p></div>
+      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">03</div><h3 style="font-size:0.98rem; margin-bottom:6px;" data-i18n="Neighbours confirm">Neighbours confirm</h3><p style="font-size:0.85rem; color:var(--muted);" data-i18n="Citizen reports of cracks or movement sharpen the alert in real time.">Citizen reports of cracks or movement sharpen the alert in real time.</p></div>
+      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">04</div><h3 style="font-size:0.98rem; margin-bottom:6px;" data-i18n="You're notified">You're notified</h3><p style="font-size:0.85rem; color:var(--muted);" data-i18n="Push, SMS, or a call — with a route to safety attached.">Push, SMS, or a call — with a route to safety attached.</p></div>
     </div>
   </div>
 
   <footer>
     <div class="wrap foot-row">
-      <div>BHU-NETRA — a landslide early warning system for India · built for Smart India Hackathon</div>
-      <div>Data sources: satellite rainfall, terrain &amp; community reports</div>
+      <div data-i18n="BHU-NETRA — a landslide early warning system for India · built for Smart India Hackathon">BHU-NETRA — a landslide early warning system for India · built for Smart India Hackathon</div>
+      <div data-i18n="Data sources: satellite rainfall, terrain &amp; community reports">Data sources: satellite rainfall, terrain &amp; community reports</div>
     </div>
   </footer>
 </section>
@@ -325,36 +328,36 @@ tr:last-child td{border-bottom:none;}
 <section class="page" id="page-dashboard">
   <div class="wrap section">
     <div class="section-head">
-      <div class="kicker">Dashboard</div>
-      <h1 style="font-size:1.9rem;">Welcome back</h1>
+      <div class="kicker" data-i18n="Dashboard">Dashboard</div>
+      <h1 style="font-size:1.9rem;" data-i18n="Welcome back">Welcome back</h1>
       <div class="rule"></div>
     </div>
 
     <div class="risk-hero-card" style="margin-bottom:28px;">
       <div>
-        <div class="place">Your primary location — Kalimpong, West Bengal</div>
-        <div class="level"><span class="badge red"><span class="dot red"></span>Warning</span></div>
-        <div style="color:var(--muted); font-size:0.8rem; margin-top:8px;">Based on rainfall + slope data · updated 4 min ago</div>
+        <div class="place" data-i18n="Your primary location — Kalimpong, West Bengal">Your primary location — Kalimpong, West Bengal</div>
+        <div class="level"><span class="badge red"><span class="dot red"></span><span data-i18n="Warning">Warning</span></span></div>
+        <div style="color:var(--muted); font-size:0.8rem; margin-top:8px;" data-i18n="Based on rainfall + slope data · updated 4 min ago">Based on rainfall + slope data · updated 4 min ago</div>
       </div>
       <div class="tier-mini">
-        <div class="tchip"><div class="tl">Next 24 hours</div><div class="tv" style="color:var(--red);">Elevated</div></div>
-        <div class="tchip"><div class="tl">Next 1 hour</div><div class="tv" style="color:var(--amber);">Watch</div></div>
+        <div class="tchip"><div class="tl" data-i18n="Next 24 hours">Next 24 hours</div><div class="tv" style="color:var(--red);" data-i18n="Elevated">Elevated</div></div>
+        <div class="tchip"><div class="tl" data-i18n="Next 1 hour">Next 1 hour</div><div class="tv" style="color:var(--amber);" data-i18n="Watch">Watch</div></div>
       </div>
     </div>
 
     <div class="quick-actions">
-      <a href="#safe-route" class="btn btn-accent">Show nearest safe route</a>
-      <a href="#report" class="btn btn-secondary">Report something</a>
-      <a href="#map" class="btn btn-secondary">View live map</a>
+      <a href="#safe-route" class="btn btn-accent" data-i18n="Show nearest safe route">Show nearest safe route</a>
+      <a href="#report" class="btn btn-secondary" data-i18n="Report something">Report something</a>
+      <a href="#map" class="btn btn-secondary" data-i18n="View live map">View live map</a>
     </div>
 
     <div class="grid grid-2">
       <div class="card">
-        <h3 style="font-size:1rem; margin-bottom:14px;">Your other saved locations</h3>
+        <h3 style="font-size:1rem; margin-bottom:14px;" data-i18n="Your other saved locations">Your other saved locations</h3>
         <div id="dash-locations"></div>
       </div>
       <div class="card">
-        <h3 style="font-size:1rem; margin-bottom:14px;">Recent alerts</h3>
+        <h3 style="font-size:1rem; margin-bottom:14px;" data-i18n="Recent alerts">Recent alerts</h3>
         <div id="dash-alerts"></div>
       </div>
     </div>
@@ -365,16 +368,16 @@ tr:last-child td{border-bottom:none;}
 <section class="page" id="page-map">
   <div class="wrap section">
     <div class="section-head">
-      <div class="kicker">Live risk map</div>
-      <h1 style="font-size:1.9rem;">Every hillside region, one glance.</h1>
+      <div class="kicker" data-i18n="Live risk map">Live risk map</div>
+      <h1 style="font-size:1.9rem;" data-i18n="Every hillside region, one glance.">Every hillside region, one glance.</h1>
       <div class="rule"></div>
     </div>
     <div id="leaflet-map"></div>
     <div class="map-legend">
-      <div class="li"><span class="badge green"><span class="dot green"></span></span> Stable</div>
-      <div class="li"><span class="badge amber"><span class="dot amber"></span></span> Watch</div>
-      <div class="li"><span class="badge red"><span class="dot red"></span></span> Warning</div>
-      <div class="li" style="margin-left:auto;">Tap a marker for rainfall, tier scores, and history</div>
+      <div class="li"><span class="badge green"><span class="dot green"></span></span> <span data-i18n="Stable">Stable</span></div>
+      <div class="li"><span class="badge amber"><span class="dot amber"></span></span> <span data-i18n="Watch">Watch</span></div>
+      <div class="li"><span class="badge red"><span class="dot red"></span></span> <span data-i18n="Warning">Warning</span></div>
+      <div class="li" style="margin-left:auto;" data-i18n="Tap a marker for rainfall, tier scores, and history">Tap a marker for rainfall, tier scores, and history</div>
     </div>
   </div>
 </section>
@@ -383,14 +386,14 @@ tr:last-child td{border-bottom:none;}
 <section class="page" id="page-alerts">
   <div class="wrap section">
     <div class="section-head">
-      <div class="kicker">Alerts</div>
-      <h1 style="font-size:1.9rem;">Your alert history</h1>
+      <div class="kicker" data-i18n="Alerts">Alerts</div>
+      <h1 style="font-size:1.9rem;" data-i18n="Your alert history">Your alert history</h1>
       <div class="rule"></div>
     </div>
     <div class="filter-row">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="A">24-hour outlook</button>
-      <button class="filter-btn" data-filter="B">Under 1 hour</button>
+      <button class="filter-btn active" data-filter="all" data-i18n="All">All</button>
+      <button class="filter-btn" data-filter="A" data-i18n="24-hour outlook">24-hour outlook</button>
+      <button class="filter-btn" data-filter="B" data-i18n="Under 1 hour">Under 1 hour</button>
     </div>
     <div class="card"><div id="alerts-list"></div></div>
   </div>
@@ -400,19 +403,19 @@ tr:last-child td{border-bottom:none;}
 <section class="page" id="page-safe-route">
   <div class="wrap section">
     <div class="section-head">
-      <div class="kicker">Safe route</div>
-      <h1 style="font-size:1.9rem;">Nearest verified safe zone</h1>
+      <div class="kicker" data-i18n="Safe route">Safe route</div>
+      <h1 style="font-size:1.9rem;" data-i18n="Nearest verified safe zone">Nearest verified safe zone</h1>
       <div class="rule"></div>
     </div>
     <div class="grid safe-route-grid">
       <div id="leaflet-safe-map"></div>
       <div class="card">
-        <h3 style="font-size:0.95rem; margin-bottom:12px;">Kalimpong Relief Center</h3>
-        <p style="font-size:0.85rem; color:var(--muted); margin-bottom:14px;">Government High School, Kalimpong — verified shelter with capacity for 400, medical post on site.</p>
-        <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:8px;"><span style="color:var(--muted);">Distance</span><strong>2.4 km</strong></div>
-        <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:20px;"><span style="color:var(--muted);">Est. walking time</span><strong>34 min</strong></div>
-        <button class="btn btn-accent" style="width:100%; justify-content:center; margin-bottom:10px;" onclick="markRoadBlocked()">Mark a road as blocked</button>
-        <button class="btn btn-secondary" style="width:100%; justify-content:center;" onclick="sendSafeStatus()">I'm safe / I need help</button>
+        <h3 style="font-size:0.95rem; margin-bottom:12px;" data-i18n="Kalimpong Relief Center">Kalimpong Relief Center</h3>
+        <p style="font-size:0.85rem; color:var(--muted); margin-bottom:14px;" data-i18n="Government High School, Kalimpong — verified shelter with capacity for 400, medical post on site.">Government High School, Kalimpong — verified shelter with capacity for 400, medical post on site.</p>
+        <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:8px;"><span style="color:var(--muted);" data-i18n="Distance">Distance</span><strong>2.4 km</strong></div>
+        <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:20px;"><span style="color:var(--muted);" data-i18n="Est. walking time">Est. walking time</span><strong>34 min</strong></div>
+        <button class="btn btn-accent" style="width:100%; justify-content:center; margin-bottom:10px;" onclick="markRoadBlocked()" data-i18n="Mark a road as blocked">Mark a road as blocked</button>
+        <button class="btn btn-secondary" style="width:100%; justify-content:center;" onclick="sendSafeStatus()" data-i18n="I'm safe / I need help">I'm safe / I need help</button>
         <div id="safe-route-note" style="font-size:0.8rem; color:var(--accent); margin-top:12px;"></div>
       </div>
     </div>
@@ -423,46 +426,46 @@ tr:last-child td{border-bottom:none;}
 <section class="page" id="page-report">
   <div class="wrap section">
     <div class="section-head">
-      <div class="kicker">Report a hazard</div>
-      <h1 style="font-size:1.9rem;">Seen a crack, or heard something?</h1>
+      <div class="kicker" data-i18n="Report a hazard">Report a hazard</div>
+      <h1 style="font-size:1.9rem;" data-i18n="Seen a crack, or heard something?">Seen a crack, or heard something?</h1>
       <div class="rule"></div>
     </div>
     <div class="grid report-grid">
       <div class="card">
         <div class="form-group">
-          <label>What did you notice?</label>
+          <label data-i18n="What did you notice?">What did you notice?</label>
           <select id="report-category">
-            <option>Crack in the ground or wall</option>
-            <option>Rumbling or unusual sound</option>
-            <option>Muddy or discoloured water</option>
-            <option>Blocked or damaged road</option>
-            <option>Other</option>
+            <option data-i18n="Crack in the ground or wall">Crack in the ground or wall</option>
+            <option data-i18n="Rumbling or unusual sound">Rumbling or unusual sound</option>
+            <option data-i18n="Muddy or discoloured water">Muddy or discoloured water</option>
+            <option data-i18n="Blocked or damaged road">Blocked or damaged road</option>
+            <option data-i18n="Other">Other</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Notes</label>
-          <textarea id="report-notes" placeholder="Briefly describe what you saw..."></textarea>
+          <label data-i18n="Notes">Notes</label>
+          <textarea id="report-notes" placeholder="Briefly describe what you saw..." data-i18n-placeholder="Briefly describe what you saw..."></textarea>
         </div>
         <div class="form-group">
-          <label>Photo (optional)</label>
+          <label data-i18n="Photo (optional)">Photo (optional)</label>
           <div class="file-drop" onclick="document.getElementById('report-photo').click()">
-            <div id="file-drop-label">Tap to add a photo</div>
+            <div id="file-drop-label" data-i18n="Tap to add a photo">Tap to add a photo</div>
             <img id="photo-preview" style="display:none;">
           </div>
           <input type="file" id="report-photo" accept="image/*" style="display:none;">
         </div>
         <div class="form-group">
-          <label>Location (tap the map to place your pin)</label>
+          <label data-i18n="Location (tap the map to place your pin)">Location (tap the map to place your pin)</label>
           <div id="leaflet-report-map"></div>
         </div>
-        <button class="btn btn-accent" style="width:100%; justify-content:center;" onclick="submitReport()">Submit report</button>
+        <button class="btn btn-accent" style="width:100%; justify-content:center;" onclick="submitReport()" data-i18n="Submit report">Submit report</button>
         <div id="report-status" style="font-size:0.82rem; color:var(--accent); margin-top:10px;"></div>
       </div>
       <div class="card">
-        <h3 style="font-size:0.95rem; margin-bottom:8px;">Why this helps</h3>
-        <p style="font-size:0.86rem; color:var(--muted); margin-bottom:16px;">Your report is checked alongside rainfall and ground-movement data. If enough nearby reports and rainfall spikes line up, the system escalates the area to an imminent Tier B alert automatically.</p>
-        <h3 style="font-size:0.95rem; margin-bottom:8px;">If you're offline</h3>
-        <p style="font-size:0.86rem; color:var(--muted);">Your report is saved on your device and will upload automatically the moment you're back in signal range — nothing is lost.</p>
+        <h3 style="font-size:0.95rem; margin-bottom:8px;" data-i18n="Why this helps">Why this helps</h3>
+        <p style="font-size:0.86rem; color:var(--muted); margin-bottom:16px;" data-i18n="Your report is checked alongside rainfall and ground-movement data. If enough nearby reports and rainfall spikes line up, the system escalates the area to an imminent Tier B alert automatically.">Your report is checked alongside rainfall and ground-movement data. If enough nearby reports and rainfall spikes line up, the system escalates the area to an imminent Tier B alert automatically.</p>
+        <h3 style="font-size:0.95rem; margin-bottom:8px;" data-i18n="If you're offline">If you're offline</h3>
+        <p style="font-size:0.86rem; color:var(--muted);" data-i18n="Your report is saved on your device and will upload automatically the moment you're back in signal range — nothing is lost.">Your report is saved on your device and will upload automatically the moment you're back in signal range — nothing is lost.</p>
       </div>
     </div>
   </div>
@@ -472,8 +475,8 @@ tr:last-child td{border-bottom:none;}
 <section class="page" id="page-community">
   <div class="wrap section">
     <div class="section-head">
-      <div class="kicker">Community map</div>
-      <h1 style="font-size:1.9rem;">Reports from people nearby</h1>
+      <div class="kicker" data-i18n="Community map">Community map</div>
+      <h1 style="font-size:1.9rem;" data-i18n="Reports from people nearby">Reports from people nearby</h1>
       <div class="rule"></div>
     </div>
     <div class="grid grid-3" id="community-grid"></div>
@@ -484,17 +487,17 @@ tr:last-child td{border-bottom:none;}
 <section class="page" id="page-authority">
   <div class="wrap section">
     <div class="section-head">
-      <div class="kicker">Authority dashboard</div>
-      <h1 style="font-size:1.9rem;">District Disaster Management view</h1>
+      <div class="kicker" data-i18n="Authority dashboard">Authority dashboard</div>
+      <h1 style="font-size:1.9rem;" data-i18n="District Disaster Management view">District Disaster Management view</h1>
       <div class="rule"></div>
     </div>
     <div class="card" style="margin-bottom:20px; overflow-x:auto;">
       <table>
-        <thead><tr><th>Region</th><th>State</th><th>24hr outlook</th><th>1hr nowcast</th><th>Rainfall</th><th>Updated</th><th></th></tr></thead>
+        <thead><tr><th data-i18n="Region">Region</th><th data-i18n="State">State</th><th data-i18n="24hr outlook">24hr outlook</th><th data-i18n="1hr nowcast">1hr nowcast</th><th data-i18n="Rainfall">Rainfall</th><th data-i18n="Updated">Updated</th><th></th></tr></thead>
         <tbody id="authority-table"></tbody>
       </table>
     </div>
-    <button class="btn btn-secondary" onclick="downloadBulletin()">Download today's bulletin (JSON)</button>
+    <button class="btn btn-secondary" onclick="downloadBulletin()" data-i18n="Download today's bulletin (JSON)">Download today's bulletin (JSON)</button>
   </div>
 </section>
 
@@ -502,33 +505,33 @@ tr:last-child td{border-bottom:none;}
 <section class="page" id="page-settings">
   <div class="wrap section">
     <div class="section-head">
-      <div class="kicker">Settings</div>
-      <h1 style="font-size:1.9rem;">Preferences</h1>
+      <div class="kicker" data-i18n="Settings">Settings</div>
+      <h1 style="font-size:1.9rem;" data-i18n="Preferences">Preferences</h1>
       <div class="rule"></div>
     </div>
     <div class="card" style="margin-bottom:20px;">
       <div class="settings-row">
-        <div><div class="lbl">Theme</div><div class="desc">Switch between dark and light mode</div></div>
+        <div><div class="lbl" data-i18n="Theme">Theme</div><div class="desc" data-i18n="Switch between dark and light mode">Switch between dark and light mode</div></div>
         <div class="toggle" id="settings-theme-toggle"><div class="knob"></div></div>
       </div>
       <div class="settings-row">
-        <div><div class="lbl">Language</div><div class="desc">Applies to navigation and key headings (demo)</div></div>
+        <div><div class="lbl" data-i18n="Language">Language</div><div class="desc" data-i18n="Changes the language across the entire app">Changes the language across the entire app</div></div>
         <div class="seg" id="lang-seg">
           <button class="active" data-lang="en">English</button>
           <button data-lang="hi">हिंदी</button>
         </div>
       </div>
       <div class="settings-row">
-        <div><div class="lbl">Push notifications</div><div class="desc">Receive alerts on this device</div></div>
+        <div><div class="lbl" data-i18n="Push notifications">Push notifications</div><div class="desc" data-i18n="Receive alerts on this device">Receive alerts on this device</div></div>
         <div class="toggle on" id="toggle-push"><div class="knob"></div></div>
       </div>
       <div class="settings-row">
-        <div><div class="lbl">SMS fallback</div><div class="desc">For low-connectivity areas</div></div>
+        <div><div class="lbl" data-i18n="SMS fallback">SMS fallback</div><div class="desc" data-i18n="For low-connectivity areas">For low-connectivity areas</div></div>
         <div class="toggle on" id="toggle-sms"><div class="knob"></div></div>
       </div>
     </div>
     <div class="card">
-      <h3 style="font-size:0.95rem; margin-bottom:14px;">Saved locations</h3>
+      <h3 style="font-size:0.95rem; margin-bottom:14px;" data-i18n="Saved locations">Saved locations</h3>
       <div id="settings-locations"></div>
     </div>
   </div>
@@ -577,12 +580,13 @@ const ROUTES = [
 function buildNav(){
   const desktop = document.getElementById('navlinks-desktop');
   const mobile = document.getElementById('mobile-nav');
-  desktop.innerHTML = ROUTES.map(r => `<a href="#${r.id}" data-route="${r.id}">${r.label}</a>`).join('');
-  mobile.innerHTML = ROUTES.map(r => `<a href="#${r.id}" data-route="${r.id}">${r.label}</a>`).join('');
+  desktop.innerHTML = ROUTES.map(r => `<a href="#${r.id}" data-route="${r.id}">${t(r.label)}</a>`).join('');
+  mobile.innerHTML = ROUTES.map(r => `<a href="#${r.id}" data-route="${r.id}">${t(r.label)}</a>`).join('');
 }
 
 let mapInitialized = false, safeMapInitialized = false, reportMapInitialized = false;
 let reportMarker = null;
+let currentAlertFilter = 'all';
 
 function render(){
   const hash = (location.hash || '#home').replace('#','');
@@ -598,7 +602,7 @@ function render(){
 
   if(hash === 'dashboard') renderDashboard();
   if(hash === 'map'){ initLeafletMap(); setTimeout(()=>{ if(window._map) window._map.invalidateSize(); }, 50); }
-  if(hash === 'alerts') renderAlerts('all');
+  if(hash === 'alerts') renderAlerts(currentAlertFilter);
   if(hash === 'safe-route'){ initSafeMap(); setTimeout(()=>{ if(window._safeMap) window._safeMap.invalidateSize(); }, 50); }
   if(hash === 'report'){ initReportMap(); setTimeout(()=>{ if(window._reportMap) window._reportMap.invalidateSize(); }, 50); }
   if(hash === 'community') renderCommunity();
@@ -615,7 +619,7 @@ function renderDashboard(){
   document.getElementById('dash-locations').innerHTML = others.map(d => `
     <div class="loc-row">
       <div><div style="font-weight:500;">${d.name}</div><div style="font-size:0.78rem; color:var(--muted);">${d.state}</div></div>
-      <span class="badge ${badgeClass(d.tierA)}"><span class="dot ${badgeClass(d.tierA)}"></span>${d.tierA}</span>
+      <span class="badge ${badgeClass(d.tierA)}"><span class="dot ${badgeClass(d.tierA)}"></span>${t(d.tierA)}</span>
     </div>`).join('');
 
   document.getElementById('dash-alerts').innerHTML = ALERTS.slice(0,3).map(a => `
@@ -666,10 +670,10 @@ function initSafeMap(){
   L.polyline([start, [27.070,88.473], [27.073,88.477], shelter], {color:'#6FBF8F', weight:4, opacity:0.85, dashArray:'1,8', lineCap:'round'}).addTo(map);
 }
 function markRoadBlocked(){
-  document.getElementById('safe-route-note').textContent = 'Thanks — this road segment has been marked blocked and the route above will update for other nearby users.';
+  document.getElementById('safe-route-note').textContent = t('Thanks — this road segment has been marked blocked and the route above will update for other nearby users.');
 }
 function sendSafeStatus(){
-  document.getElementById('safe-route-note').textContent = 'Your status has been shared with the local authority contact for this area.';
+  document.getElementById('safe-route-note').textContent = t('Your status has been shared with the local authority contact for this area.');
 }
 
 /* ============================= REPORT ============================= */
@@ -696,7 +700,7 @@ document.getElementById('report-photo').addEventListener('change', function(e){
     const img = document.getElementById('photo-preview');
     img.src = ev.target.result;
     img.style.display = 'block';
-    document.getElementById('file-drop-label').textContent = 'Photo attached — tap to change';
+    document.getElementById('file-drop-label').textContent = t('Photo attached — tap to change');
     window._reportPhotoData = ev.target.result;
   };
   reader.readAsDataURL(file);
@@ -719,10 +723,10 @@ function submitReport(){
     time: 'Just now', confirms: 0
   });
   saveReports(reports);
-  document.getElementById('report-status').textContent = 'Report submitted — it now appears on the community map.';
+  document.getElementById('report-status').textContent = t('Report submitted — it now appears on the community map.');
   document.getElementById('report-notes').value = '';
   document.getElementById('photo-preview').style.display = 'none';
-  document.getElementById('file-drop-label').textContent = 'Tap to add a photo';
+  document.getElementById('file-drop-label').textContent = t('Tap to add a photo');
   window._reportPhotoData = null;
 }
 
@@ -738,19 +742,19 @@ function renderCommunity(){
   const all = [...userReports, ...SEED_REPORTS];
   document.getElementById('community-grid').innerHTML = all.map(r => `
     <div class="card report-card">
-      ${r.photo ? `<img src="${r.photo}">` : `<div style="height:140px; border-radius:8px; background:var(--bg-elev2); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:0.78rem;">No photo attached</div>`}
-      <div style="font-weight:600; font-size:0.9rem;">${r.category}</div>
-      <div style="font-size:0.85rem; color:var(--muted);">${r.notes || 'No additional notes.'}</div>
+      ${r.photo ? `<img src="${r.photo}">` : `<div style="height:140px; border-radius:8px; background:var(--bg-elev2); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:0.78rem;">${t('No photo attached')}</div>`}
+      <div style="font-weight:600; font-size:0.9rem;">${t(r.category)}</div>
+      <div style="font-size:0.85rem; color:var(--muted);">${r.notes ? r.notes : t('No additional notes.')}</div>
       <div class="report-meta">
-        <span>${r.time}</span>
-        <button class="confirm-btn" onclick="confirmReport('${r.id}', this)">✓ Confirm (${r.confirms})</button>
+        <span>${t(r.time)}</span>
+        <button class="confirm-btn" onclick="confirmReport('${r.id}', this)">✓ ${t('Confirm')} (${r.confirms})</button>
       </div>
     </div>
   `).join('');
 }
 function confirmReport(id, btn){
   btn.classList.add('confirmed');
-  btn.textContent = '✓ Confirmed';
+  btn.textContent = '✓ ' + t('Confirmed');
 }
 
 /* ============================= ALERTS ============================= */
@@ -763,7 +767,7 @@ function renderAlerts(filter){
       </div>
       <div style="flex:1;">
         <div style="display:flex; justify-content:space-between; gap:10px;">
-          <div style="font-weight:600; font-size:0.92rem;">${a.place} <span class="badge ${a.level}" style="margin-left:8px;">${a.tier === 'A' ? '24hr outlook' : 'Under 1hr'}</span></div>
+          <div style="font-weight:600; font-size:0.92rem;">${a.place} <span class="badge ${a.level}" style="margin-left:8px;">${a.tier === 'A' ? t('24hr outlook') : t('Under 1hr')}</span></div>
           <div style="font-size:0.78rem; color:var(--muted); white-space:nowrap;">${a.time}</div>
         </div>
         <div style="font-size:0.86rem; color:var(--muted); margin-top:4px;">${a.msg}</div>
@@ -775,7 +779,8 @@ document.addEventListener('click', function(e){
   if(e.target.classList.contains('filter-btn')){
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     e.target.classList.add('active');
-    renderAlerts(e.target.getAttribute('data-filter'));
+    currentAlertFilter = e.target.getAttribute('data-filter');
+    renderAlerts(currentAlertFilter);
   }
 });
 
@@ -784,10 +789,10 @@ function renderAuthority(){
   document.getElementById('authority-table').innerHTML = DISTRICTS.map(d => `
     <tr>
       <td>${d.name}</td><td>${d.state}</td>
-      <td><span class="badge ${badgeClass(d.tierA)}"><span class="dot ${badgeClass(d.tierA)}"></span>${d.tierA}</span></td>
-      <td><span class="badge ${badgeClass(d.tierB)}"><span class="dot ${badgeClass(d.tierB)}"></span>${d.tierB}</span></td>
+      <td><span class="badge ${badgeClass(d.tierA)}"><span class="dot ${badgeClass(d.tierA)}"></span>${t(d.tierA)}</span></td>
+      <td><span class="badge ${badgeClass(d.tierB)}"><span class="dot ${badgeClass(d.tierB)}"></span>${t(d.tierB)}</span></td>
       <td>${d.rainfall}</td><td>${d.updated}</td>
-      <td><button class="btn btn-sm btn-secondary" onclick="alert('Confirmed by authority for ${d.name}')">Confirm</button></td>
+      <td><button class="btn btn-sm btn-secondary" onclick="alert('${t('Confirmed by authority for')} ${d.name}')">${t('Confirm')}</button></td>
     </tr>
   `).join('');
 }
@@ -812,7 +817,7 @@ function renderSettings(){
   document.getElementById('settings-theme-toggle').classList.toggle('on', theme === 'light');
 
   document.getElementById('settings-locations').innerHTML = DISTRICTS.slice(0,4).map(d => `
-    <div class="loc-row"><div>${d.name}, ${d.state}</div><button class="btn btn-sm btn-secondary" onclick="this.closest('.loc-row').remove()">Remove</button></div>
+    <div class="loc-row"><div>${d.name}, ${d.state}</div><button class="btn btn-sm btn-secondary" onclick="this.closest('.loc-row').remove()">${t('Remove')}</button></div>
   `).join('');
 }
 document.getElementById('settings-theme-toggle')?.addEventListener('click', function(){
@@ -828,19 +833,142 @@ document.getElementById('theme-toggle-btn').addEventListener('click', function()
   if(el) el.addEventListener('click', () => el.classList.toggle('on'));
 });
 
-const I18N = {
-  en: {Home:'Home', Dashboard:'Dashboard', 'Live Map':'Live Map', Alerts:'Alerts', 'Safe Route':'Safe Route', Report:'Report', Community:'Community', Authority:'Authority', Settings:'Settings'},
-  hi: {Home:'होम', Dashboard:'डैशबोर्ड', 'Live Map':'लाइव मैप', Alerts:'अलर्ट', 'Safe Route':'सुरक्षित मार्ग', Report:'रिपोर्ट करें', Community:'समुदाय', Authority:'प्राधिकरण', Settings:'सेटिंग्स'}
+/* ============================= TRANSLATION ============================= */
+// English source text is used as the lookup key; missing keys just fall back to English.
+const HI = {
+  // Nav
+  'Home':'होम', 'Dashboard':'डैशबोर्ड', 'Live Map':'लाइव मैप', 'Alerts':'अलर्ट', 'Safe Route':'सुरक्षित मार्ग',
+  'Report':'रिपोर्ट करें', 'Community':'समुदाय', 'Authority':'प्राधिकरण', 'Settings':'सेटिंग्स',
+  // Home / hero
+  'Live across 9 hill districts · updated every few minutes':'9 पहाड़ी ज़िलों में सक्रिय · हर कुछ मिनट में अपडेट',
+  'Know if your hillside is safe, before the rain decides for you.':'बारिश फैसला करे, उससे पहले जानिए कि आपकी पहाड़ी सुरक्षित है या नहीं।',
+  'BHU-NETRA watches rainfall, ground movement, and reports from your neighbours to warn you up to a day in advance — and in the final hour, when it matters most.':'भू-नेत्र बारिश, ज़मीन की हलचल और आपके पड़ोसियों की रिपोर्टों पर नज़र रखता है ताकि आपको एक दिन पहले तक चेतावनी दी जा सके — और आख़िरी घंटे में, जब यह सबसे ज़्यादा मायने रखता है।',
+  'Check my area':'मेरा क्षेत्र जांचें',
+  'View live map':'लाइव मैप देखें',
+  'regions monitored':'क्षेत्रों की निगरानी',
+  'earliest warning':'सबसे पहली चेतावनी',
+  'imminent nowcast':'तत्काल पूर्वानुमान',
+  'hardware sensors needed':'हार्डवेयर सेंसर की ज़रूरत',
+  'What makes this different':'यह अलग कैसे है',
+  'Most warning systems tell you a district is at risk. This tells you what to do about it.':'ज़्यादातर चेतावनी प्रणालियाँ बताती हैं कि ज़िला ख़तरे में है। यह बताता है कि आपको क्या करना है।',
+  '24-hour outlook':'24 घंटे का पूर्वानुमान',
+  'Rainfall trends, soil moisture, and terrain history combine into a day-ahead risk score for every hillside, not just instrumented districts.':'बारिश के रुझान, मिट्टी की नमी और भू-भाग का इतिहास मिलकर हर पहाड़ी के लिए एक दिन पहले का जोखिम स्कोर बनाते हैं, न कि सिर्फ़ उपकरण-युक्त ज़िलों के लिए।',
+  'Under-1-hour nowcast':'1 घंटे से कम का पूर्वानुमान',
+  "When rainfall spikes on ground that's already shifting and neighbours report cracks, the system escalates immediately.":'जब पहले से खिसक रही ज़मीन पर बारिश अचानक तेज़ हो और पड़ोसी दरारों की रिपोर्ट करें, तो प्रणाली तुरंत अलर्ट बढ़ा देती है।',
+  'A place to actually go':'जाने के लिए एक असली जगह',
+  'Every alert comes with a route to the nearest verified safe zone, avoiding roads neighbours have marked blocked.':'हर अलर्ट के साथ निकटतम सत्यापित सुरक्षित क्षेत्र का रास्ता मिलता है, उन सड़कों से बचते हुए जिन्हें पड़ोसियों ने अवरुद्ध बताया है।',
+  'How it works':'यह कैसे काम करता है',
+  'From satellite to your phone, in four steps.':'सैटेलाइट से आपके फ़ोन तक, चार चरणों में।',
+  'Data comes in':'डेटा आता है',
+  'Free satellite rainfall and ground-movement data, refreshed continuously.':'मुफ़्त सैटेलाइट वर्षा और भूमि-हलचल डेटा, लगातार अपडेट होता रहता है।',
+  'Risk is scored':'जोखिम स्कोर तय होता है',
+  'A model trained on historical landslide records turns data into a live risk level.':'पुराने भूस्खलन रिकॉर्ड पर प्रशिक्षित एक मॉडल डेटा को लाइव जोखिम स्तर में बदलता है।',
+  'Neighbours confirm':'पड़ोसी पुष्टि करते हैं',
+  'Citizen reports of cracks or movement sharpen the alert in real time.':'दरारों या हलचल की नागरिक रिपोर्टें अलर्ट को वास्तविक समय में और सटीक बनाती हैं।',
+  "You're notified":'आपको सूचित किया जाता है',
+  'Push, SMS, or a call — with a route to safety attached.':'पुश, एसएमएस या कॉल — साथ में सुरक्षा तक का रास्ता भी।',
+  'BHU-NETRA — a landslide early warning system for India · built for Smart India Hackathon':'भू-नेत्र — भारत के लिए भूस्खलन पूर्व चेतावनी प्रणाली · स्मार्ट इंडिया हैकाथॉन के लिए बनाया गया',
+  'Data sources: satellite rainfall, terrain & community reports':'डेटा स्रोत: सैटेलाइट वर्षा, भू-भाग और सामुदायिक रिपोर्टें',
+  // Dashboard
+  'Welcome back':'वापसी पर स्वागत है',
+  'Your primary location — Kalimpong, West Bengal':'आपका मुख्य स्थान — कलिम्पोंग, पश्चिम बंगाल',
+  'Based on rainfall + slope data · updated 4 min ago':'वर्षा + ढलान डेटा पर आधारित · 4 मिनट पहले अपडेट किया गया',
+  'Next 24 hours':'अगले 24 घंटे',
+  'Next 1 hour':'अगला 1 घंटा',
+  'Elevated':'बढ़ा हुआ',
+  'Show nearest safe route':'निकटतम सुरक्षित रास्ता दिखाएं',
+  'Report something':'कुछ रिपोर्ट करें',
+  'Your other saved locations':'आपके अन्य सहेजे गए स्थान',
+  'Recent alerts':'हाल के अलर्ट',
+  // Status words (shared across pages)
+  'Warning':'चेतावनी', 'Watch':'निगरानी', 'Stable':'स्थिर',
+  // Live map
+  'Live risk map':'लाइव जोखिम मैप',
+  'Every hillside region, one glance.':'हर पहाड़ी क्षेत्र, एक ही नज़र में।',
+  'Tap a marker for rainfall, tier scores, and history':'वर्षा, स्तर स्कोर और इतिहास देखने के लिए मार्कर पर टैप करें',
+  // Alerts
+  'Your alert history':'आपका अलर्ट इतिहास',
+  'All':'सभी',
+  'Under 1 hour':'1 घंटे से कम',
+  '24hr outlook':'24 घंटे का पूर्वानुमान',
+  'Under 1hr':'1 घंटे से कम',
+  // Safe route
+  'Nearest verified safe zone':'निकटतम सत्यापित सुरक्षित क्षेत्र',
+  'Kalimpong Relief Center':'कलिम्पोंग राहत केंद्र',
+  'Government High School, Kalimpong — verified shelter with capacity for 400, medical post on site.':'सरकारी उच्च विद्यालय, कलिम्पोंग — 400 की क्षमता वाला सत्यापित आश्रय, स्थल पर चिकित्सा केंद्र।',
+  'Distance':'दूरी',
+  'Est. walking time':'अनुमानित पैदल समय',
+  'Mark a road as blocked':'सड़क को अवरुद्ध चिह्नित करें',
+  "I'm safe / I need help":'मैं सुरक्षित हूं / मुझे मदद चाहिए',
+  'Thanks — this road segment has been marked blocked and the route above will update for other nearby users.':'धन्यवाद — इस सड़क खंड को अवरुद्ध चिह्नित कर दिया गया है और ऊपर का रास्ता आस-पास के अन्य उपयोगकर्ताओं के लिए अपडेट हो जाएगा।',
+  'Your status has been shared with the local authority contact for this area.':'आपकी स्थिति इस क्षेत्र के स्थानीय प्राधिकरण संपर्क के साथ साझा कर दी गई है।',
+  // Report
+  'Report a hazard':'ख़तरे की रिपोर्ट करें',
+  'Seen a crack, or heard something?':'कोई दरार देखी, या कुछ सुना?',
+  'What did you notice?':'आपने क्या देखा?',
+  'Crack in the ground or wall':'ज़मीन या दीवार में दरार',
+  'Rumbling or unusual sound':'गड़गड़ाहट या असामान्य आवाज़',
+  'Muddy or discoloured water':'गंदला या रंग बदला पानी',
+  'Blocked or damaged road':'अवरुद्ध या क्षतिग्रस्त सड़क',
+  'Other':'अन्य',
+  'Notes':'टिप्पणियां',
+  'Briefly describe what you saw...':'आपने जो देखा उसका संक्षेप में वर्णन करें...',
+  'Photo (optional)':'फ़ोटो (वैकल्पिक)',
+  'Tap to add a photo':'फ़ोटो जोड़ने के लिए टैप करें',
+  'Photo attached — tap to change':'फ़ोटो जोड़ी गई — बदलने के लिए टैप करें',
+  'Location (tap the map to place your pin)':'स्थान (अपना पिन लगाने के लिए मैप पर टैप करें)',
+  'Submit report':'रिपोर्ट सबमिट करें',
+  'Report submitted — it now appears on the community map.':'रिपोर्ट सबमिट हो गई — अब यह सामुदायिक मैप पर दिखेगी।',
+  'Why this helps':'यह कैसे मदद करता है',
+  'Your report is checked alongside rainfall and ground-movement data. If enough nearby reports and rainfall spikes line up, the system escalates the area to an imminent Tier B alert automatically.':'आपकी रिपोर्ट को वर्षा और भूमि-हलचल डेटा के साथ जांचा जाता है। यदि पर्याप्त नज़दीकी रिपोर्टें और वर्षा वृद्धि मेल खाती हैं, तो प्रणाली स्वतः इस क्षेत्र को तत्काल टियर-बी अलर्ट में बदल देती है।',
+  "If you're offline":'अगर आप ऑफ़लाइन हैं',
+  "Your report is saved on your device and will upload automatically the moment you're back in signal range — nothing is lost.":'आपकी रिपोर्ट आपके डिवाइस पर सहेजी जाती है और सिग्नल मिलते ही अपने आप अपलोड हो जाएगी — कुछ भी नहीं खोता।',
+  'No photo attached':'कोई फ़ोटो संलग्न नहीं',
+  'No additional notes.':'कोई अतिरिक्त टिप्पणी नहीं।',
+  'Confirm':'पुष्टि करें',
+  'Confirmed':'पुष्टि हो गई',
+  'Just now':'अभी अभी',
+  '1 hr ago':'1 घंटे पहले',
+  '3 hr ago':'3 घंटे पहले',
+  '6 hr ago':'6 घंटे पहले',
+  // Community
+  'Community map':'सामुदायिक मैप',
+  'Reports from people nearby':'आस-पास के लोगों की रिपोर्टें',
+  // Authority
+  'Authority dashboard':'प्राधिकरण डैशबोर्ड',
+  'District Disaster Management view':'ज़िला आपदा प्रबंधन दृश्य',
+  'Region':'क्षेत्र', 'State':'राज्य', '1hr nowcast':'1 घंटे का पूर्वानुमान', 'Rainfall':'वर्षा', 'Updated':'अपडेट किया गया',
+  "Download today's bulletin (JSON)":'आज का बुलेटिन डाउनलोड करें (JSON)',
+  'Confirmed by authority for':'द्वारा प्राधिकरण-पुष्टि हुई:',
+  // Settings
+  'Preferences':'प्राथमिकताएं',
+  'Theme':'थीम',
+  'Switch between dark and light mode':'डार्क और लाइट मोड के बीच स्विच करें',
+  'Language':'भाषा',
+  'Changes the language across the entire app':'पूरे ऐप की भाषा बदलता है',
+  'Push notifications':'पुश सूचनाएं',
+  'Receive alerts on this device':'इस डिवाइस पर अलर्ट प्राप्त करें',
+  'SMS fallback':'एसएमएस फ़ॉलबैक',
+  'For low-connectivity areas':'कम-कनेक्टिविटी वाले क्षेत्रों के लिए',
+  'Saved locations':'सहेजे गए स्थान',
+  'Remove':'हटाएं'
 };
+let currentLang = localStorage.getItem('bhunetra_lang') || 'en';
+function t(str){ return currentLang === 'hi' ? (HI[str] || str) : str; }
+
+function applyLanguage(lang){
+  currentLang = lang;
+  localStorage.setItem('bhunetra_lang', lang);
+  document.documentElement.setAttribute('lang', lang);
+  document.querySelectorAll('#lang-seg button').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === lang));
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.getAttribute('data-i18n-placeholder')); });
+  buildNav();
+  render();
+}
 document.getElementById('lang-seg')?.addEventListener('click', function(e){
   if(e.target.tagName !== 'BUTTON') return;
-  document.querySelectorAll('#lang-seg button').forEach(b => b.classList.remove('active'));
-  e.target.classList.add('active');
-  const lang = e.target.getAttribute('data-lang');
-  document.querySelectorAll('[data-route]').forEach(a => {
-    const route = ROUTES.find(r => r.id === a.getAttribute('data-route'));
-    a.textContent = I18N[lang][route.label] || route.label;
-  });
+  applyLanguage(e.target.getAttribute('data-lang'));
 });
 
 /* ============================= MOBILE NAV ============================= */
@@ -851,8 +979,7 @@ document.getElementById('hamburger-btn').addEventListener('click', function(){
 /* ============================= INIT ============================= */
 (function init(){
   applyTheme(localStorage.getItem('bhunetra_theme') || 'dark');
-  buildNav();
-  render();
+  applyLanguage(localStorage.getItem('bhunetra_lang') || 'en');
 })();
 
 if('serviceWorker' in navigator){
