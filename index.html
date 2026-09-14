@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BHU-NETRA — Landslide Early Warning for India</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0F1C17">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+/* ============ DESIGN TOKENS ============ */
+:root{
+  --bg:#0F1C17; --bg-elev:#16261F; --bg-elev2:#1C2E25; --border:#2C4438;
+  --text:#EDEDE3; --muted:#9CAFA2;
+  --green:#4C9A6B; --amber:#D9A441; --red:#C1462F; --accent:#6FBF8F;
+  --font-head:'Space Grotesk',sans-serif; --font-body:'IBM Plex Sans',sans-serif;
+  --radius:10px;
+}
+html[data-theme="light"]{
+  --bg:#FAF8F4; --bg-elev:#FFFFFF; --bg-elev2:#F1EEE6; --border:#E4E0D6;
+  --text:#182821; --muted:#5B6B62;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg); color:var(--text); font-family:var(--font-body); line-height:1.5; min-height:100vh;}
+h1,h2,h3,.font-head{font-family:var(--font-head); letter-spacing:-0.01em;}
+a{color:inherit;}
+.wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+button{font-family:inherit; cursor:pointer;}
+::-webkit-scrollbar{width:10px;} ::-webkit-scrollbar-thumb{background:var(--border); border-radius:6px;}
+
+/* ============ NAV ============ */
+#topnav{
+  position:sticky; top:0; z-index:1000; background:rgba(15,28,23,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+html[data-theme="light"] #topnav{ background:rgba(250,248,244,0.92); }
+.nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 24px; max-width:1180px; margin:0 auto;}
+.logo{display:flex; align-items:center; gap:9px; font-family:var(--font-head); font-weight:600; font-size:1.1rem; text-decoration:none; color:var(--text);}
+.navlinks{display:flex; gap:6px; align-items:center;}
+.navlinks a{
+  color:var(--muted); text-decoration:none; font-size:0.86rem; padding:8px 12px; border-radius:7px; transition:.15s;
+  white-space:nowrap;
+}
+.navlinks a:hover{color:var(--text); background:var(--bg-elev2);}
+.navlinks a.active{color:var(--text); background:var(--bg-elev2); font-weight:600;}
+.nav-right{display:flex; align-items:center; gap:10px;}
+.icon-btn{
+  width:36px; height:36px; border-radius:8px; border:1px solid var(--border); background:var(--bg-elev);
+  color:var(--text); display:flex; align-items:center; justify-content:center;
+}
+.hamburger{display:none;}
+#mobile-nav{display:none; flex-direction:column; gap:2px; padding:10px 24px 16px; border-top:1px solid var(--border);}
+#mobile-nav a{padding:11px 8px; text-decoration:none; color:var(--muted); border-radius:7px; font-size:0.92rem;}
+#mobile-nav a.active{color:var(--text); background:var(--bg-elev2); font-weight:600;}
+
+@media (max-width:880px){
+  .navlinks{display:none;}
+  .hamburger{display:flex;}
+  #mobile-nav.open{display:flex;}
+}
+
+/* ============ GENERIC LAYOUT ============ */
+.page{display:none; min-height:calc(100vh - 64px);}
+.page.active{display:block;}
+.hero-photo{
+  position:relative; background-size:cover; background-position:center; border-radius:0;
+}
+.hero-photo::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(15,28,23,0.55) 0%, rgba(15,28,23,0.88) 85%);
+}
+html[data-theme="light"] .hero-photo::after{
+  background:linear-gradient(180deg, rgba(250,248,244,0.35) 0%, rgba(250,248,244,0.94) 90%);
+}
+.hero-content{position:relative; z-index:1;}
+
+.section{padding:56px 0;}
+.section-head{max-width:60ch; margin-bottom:36px;}
+.section-head .kicker{color:var(--muted); font-size:0.86rem; margin-bottom:8px; display:flex; align-items:center; gap:8px;}
+.section-head h1, .section-head h2{font-size:2rem; font-weight:600; line-height:1.15;}
+.rule{width:56px; height:4px; background:var(--accent); border-radius:2px; margin-top:10px;}
+
+.card{background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); padding:20px;}
+.grid{display:grid; gap:16px;}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+@media (max-width:900px){ .grid-3,.grid-4{grid-template-columns:1fr 1fr;} }
+@media (max-width:620px){ .grid-3,.grid-4,.grid-2{grid-template-columns:1fr;} }
+
+.btn{display:inline-flex; align-items:center; gap:8px; border-radius:8px; padding:11px 20px; font-weight:600; font-size:0.9rem; border:none; text-decoration:none;}
+.btn-primary{background:var(--text); color:var(--bg);}
+.btn-secondary{background:transparent; color:var(--text); border:1px solid var(--border);}
+.btn-accent{background:var(--accent); color:#0B1712;}
+.btn:hover{filter:brightness(1.08);}
+.btn-sm{padding:8px 14px; font-size:0.82rem;}
+
+.badge{display:inline-flex; align-items:center; gap:6px; font-size:0.78rem; font-weight:600; padding:4px 10px; border-radius:20px;}
+.badge .dot{width:7px; height:7px; border-radius:50%;}
+.badge.green{background:rgba(76,154,107,0.15); color:var(--green);}
+.badge.amber{background:rgba(217,164,65,0.15); color:var(--amber);}
+.badge.red{background:rgba(193,70,47,0.15); color:var(--red);}
+.badge .dot.green{background:var(--green);} .badge .dot.amber{background:var(--amber);} .badge .dot.red{background:var(--red);}
+
+.live-pulse{width:7px; height:7px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; flex-shrink:0;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(111,191,143,.5);} 70%{box-shadow:0 0 0 8px rgba(111,191,143,0);} 100%{box-shadow:0 0 0 0 rgba(111,191,143,0);}}
+
+footer{border-top:1px solid var(--border); padding:32px 0; margin-top:40px;}
+.foot-row{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; color:var(--muted); font-size:0.82rem;}
+
+/* ============ LANDING ============ */
+#page-home .hero-photo{ min-height:560px; display:flex; align-items:center; }
+#page-home .hero-body{padding:80px 0;}
+#page-home h1{font-size:3rem; max-width:16ch; margin-bottom:18px;}
+#page-home .lede{color:var(--muted); font-size:1.08rem; max-width:48ch; margin-bottom:28px;}
+.trust-strip{display:flex; gap:26px; flex-wrap:wrap; margin-top:32px; padding-top:22px; border-top:1px solid var(--border);}
+.trust-item .num{font-family:var(--font-head); font-weight:600; font-size:1.25rem;}
+.trust-item .lbl{font-size:0.78rem; color:var(--muted);}
+.feature-icon{width:36px; height:36px; margin-bottom:16px;}
+
+/* ============ DASHBOARD ============ */
+.risk-hero-card{
+  background:var(--bg-elev); border:1px solid var(--border); border-radius:14px; padding:26px;
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+}
+.risk-hero-card .place{font-size:0.85rem; color:var(--muted); margin-bottom:8px;}
+.risk-hero-card .level{font-family:var(--font-head); font-size:1.6rem; font-weight:600; display:flex; align-items:center; gap:10px;}
+.tier-mini{display:flex; gap:14px;}
+.tier-mini .tchip{background:var(--bg-elev2); border:1px solid var(--border); border-radius:10px; padding:12px 18px; min-width:140px;}
+.tier-mini .tchip .tl{font-size:0.72rem; color:var(--muted); margin-bottom:4px;}
+.tier-mini .tchip .tv{font-family:var(--font-head); font-weight:600; font-size:1rem;}
+.quick-actions{display:flex; gap:12px; flex-wrap:wrap; margin:28px 0;}
+.loc-row{display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid var(--border);}
+.loc-row:last-child{border-bottom:none;}
+
+/* ============ MAP ============ */
+#leaflet-map, #leaflet-safe-map, #leaflet-report-map{width:100%; border-radius:var(--radius); border:1px solid var(--border); background:var(--bg-elev2);}
+#leaflet-map{height:560px;}
+#leaflet-safe-map{height:420px;}
+#leaflet-report-map{height:300px;}
+.map-legend{display:flex; gap:18px; flex-wrap:wrap; padding:14px 18px; background:var(--bg-elev); border:1px solid var(--border); border-top:none; border-radius:0 0 var(--radius) var(--radius); font-size:0.82rem; color:var(--muted);}
+.map-legend .li{display:flex; align-items:center; gap:7px;}
+.leaflet-popup-content-wrapper{background:var(--bg-elev); color:var(--text); border-radius:8px;}
+.leaflet-popup-tip{background:var(--bg-elev);}
+.popup-title{font-family:var(--font-head); font-weight:600; margin-bottom:4px;}
+
+/* ============ ALERTS ============ */
+.alert-item{display:flex; gap:14px; padding:16px 0; border-bottom:1px solid var(--border);}
+.alert-item:last-child{border-bottom:none;}
+.alert-icon{width:38px; height:38px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.filter-row{display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;}
+.filter-btn{background:var(--bg-elev); border:1px solid var(--border); color:var(--muted); padding:8px 16px; border-radius:20px; font-size:0.82rem;}
+.filter-btn.active{background:var(--accent); color:#0B1712; border-color:var(--accent); font-weight:600;}
+
+/* ============ REPORT / COMMUNITY ============ */
+.form-group{margin-bottom:18px;}
+.form-group label{display:block; font-size:0.85rem; margin-bottom:7px; color:var(--muted);}
+.form-group input[type=text], .form-group textarea, .form-group select{
+  width:100%; background:var(--bg-elev2); border:1px solid var(--border); color:var(--text);
+  padding:11px 13px; border-radius:8px; font-family:inherit; font-size:0.92rem;
+}
+.form-group textarea{min-height:90px; resize:vertical;}
+.file-drop{
+  border:1.5px dashed var(--border); border-radius:10px; padding:22px; text-align:center; color:var(--muted); font-size:0.85rem;
+  cursor:pointer;
+}
+.file-drop img{max-width:100%; max-height:160px; border-radius:8px; margin-top:10px;}
+.report-card{display:flex; flex-direction:column; gap:10px;}
+.report-card img{width:100%; height:140px; object-fit:cover; border-radius:8px; background:var(--bg-elev2);}
+.report-meta{display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; color:var(--muted);}
+.confirm-btn{background:var(--bg-elev2); border:1px solid var(--border); color:var(--text); padding:7px 12px; border-radius:7px; font-size:0.8rem; display:flex; align-items:center; gap:6px;}
+.confirm-btn.confirmed{background:rgba(111,191,143,0.15); color:var(--accent); border-color:var(--accent);}
+
+/* ============ SETTINGS ============ */
+.settings-row{display:flex; justify-content:space-between; align-items:center; padding:16px 0; border-bottom:1px solid var(--border);}
+.settings-row:last-child{border-bottom:none;}
+.settings-row .lbl{font-weight:500;} .settings-row .desc{font-size:0.82rem; color:var(--muted); margin-top:3px;}
+.toggle{position:relative; width:46px; height:26px; background:var(--bg-elev2); border:1px solid var(--border); border-radius:20px; cursor:pointer; flex-shrink:0;}
+.toggle .knob{position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:50%; background:var(--muted); transition:.2s;}
+.toggle.on{background:var(--accent);}
+.toggle.on .knob{left:22px; background:#0B1712;}
+.seg{display:flex; background:var(--bg-elev2); border:1px solid var(--border); border-radius:8px; padding:3px; gap:3px;}
+.seg button{background:transparent; border:none; color:var(--muted); padding:7px 14px; border-radius:6px; font-size:0.82rem;}
+.seg button.active{background:var(--bg-elev); color:var(--text); font-weight:600;}
+
+/* ============ AUTHORITY ============ */
+table{width:100%; border-collapse:collapse; font-size:0.86rem;}
+th{text-align:left; color:var(--muted); font-weight:500; padding:10px 12px; border-bottom:1px solid var(--border); font-size:0.78rem; text-transform:uppercase; letter-spacing:.03em;}
+td{padding:12px; border-bottom:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+</style>
+</head>
+<body>
+
+<nav id="topnav">
+  <div class="nav-inner">
+    <a href="#home" class="logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M2 18 L8 8 L12 14 L16 6 L22 18 Z" stroke="#6FBF8F" stroke-width="1.6" stroke-linejoin="round" fill="none"/></svg>
+      BHU-NETRA
+    </a>
+    <div class="navlinks" id="navlinks-desktop"></div>
+    <div class="nav-right">
+      <button class="icon-btn" id="theme-toggle-btn" title="Toggle theme">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" id="theme-icon"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn hamburger" id="hamburger-btn" title="Menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-nav"></div>
+</nav>
+
+<!-- ============================= HOME / LANDING ============================= -->
+<section class="page" id="page-home">
+  <div class="hero-photo" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Panoramic%20view%20from%20hill%20in%20Shimla.jpg?width=1800');">
+    <div class="wrap hero-content hero-body">
+      <div style="display:flex; align-items:center; gap:9px; color:var(--muted); font-size:0.86rem; margin-bottom:20px;">
+        <span class="live-pulse"></span> Live across 9 hill districts · updated every few minutes
+      </div>
+      <h1>Know if your hillside is safe, before the rain decides for you.</h1>
+      <p class="lede">BHU-NETRA watches rainfall, ground movement, and reports from your neighbours to warn you up to a day in advance — and in the final hour, when it matters most.</p>
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <a href="#dashboard" class="btn btn-accent">Check my area</a>
+        <a href="#map" class="btn btn-secondary" style="background:rgba(255,255,255,0.05);">View live map</a>
+      </div>
+      <div class="trust-strip">
+        <div class="trust-item"><div class="num">9</div><div class="lbl">regions monitored</div></div>
+        <div class="trust-item"><div class="num">24 hr</div><div class="lbl">earliest warning</div></div>
+        <div class="trust-item"><div class="num">&lt;1 hr</div><div class="lbl">imminent nowcast</div></div>
+        <div class="trust-item"><div class="num">0</div><div class="lbl">hardware sensors needed</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap section">
+    <div class="section-head">
+      <div class="kicker">What makes this different</div>
+      <h2>Most warning systems tell you a district is at risk. This tells you what to do about it.</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="grid grid-3">
+      <div class="card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none"><path d="M3 18 L9 8 L13 14 L17 7 L21 18" stroke="var(--text)" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M3 14 Q 8 11 13 13 T 21 12" stroke="var(--green)" stroke-width="1.4" fill="none"/></svg>
+        <h3 style="margin-bottom:8px; font-size:1.05rem;">24-hour outlook</h3>
+        <p style="color:var(--muted); font-size:0.9rem;">Rainfall trends, soil moisture, and terrain history combine into a day-ahead risk score for every hillside, not just instrumented districts.</p>
+      </div>
+      <div class="card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="var(--amber)" stroke-width="1.6"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke="var(--amber)" stroke-width="1.6"/></svg>
+        <h3 style="margin-bottom:8px; font-size:1.05rem;">Under-1-hour nowcast</h3>
+        <p style="color:var(--muted); font-size:0.9rem;">When rainfall spikes on ground that's already shifting and neighbours report cracks, the system escalates immediately.</p>
+      </div>
+      <div class="card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none"><path d="M5 21 L5 10 L12 4 L19 10 L19 21 Z" stroke="var(--accent)" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M9 21 v-6 h6 v6" stroke="var(--accent)" stroke-width="1.6"/></svg>
+        <h3 style="margin-bottom:8px; font-size:1.05rem;">A place to actually go</h3>
+        <p style="color:var(--muted); font-size:0.9rem;">Every alert comes with a route to the nearest verified safe zone, avoiding roads neighbours have marked blocked.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap section" style="padding-top:0;">
+    <div class="section-head">
+      <div class="kicker">How it works</div>
+      <h2>From satellite to your phone, in four steps.</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="grid grid-4">
+      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">01</div><h3 style="font-size:0.98rem; margin-bottom:6px;">Data comes in</h3><p style="font-size:0.85rem; color:var(--muted);">Free satellite rainfall and ground-movement data, refreshed continuously.</p></div>
+      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">02</div><h3 style="font-size:0.98rem; margin-bottom:6px;">Risk is scored</h3><p style="font-size:0.85rem; color:var(--muted);">A model trained on historical landslide records turns data into a live risk level.</p></div>
+      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">03</div><h3 style="font-size:0.98rem; margin-bottom:6px;">Neighbours confirm</h3><p style="font-size:0.85rem; color:var(--muted);">Citizen reports of cracks or movement sharpen the alert in real time.</p></div>
+      <div class="card"><div style="font-family:var(--font-head); color:var(--accent); font-weight:600; margin-bottom:8px;">04</div><h3 style="font-size:0.98rem; margin-bottom:6px;">You're notified</h3><p style="font-size:0.85rem; color:var(--muted);">Push, SMS, or a call — with a route to safety attached.</p></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap foot-row">
+      <div>BHU-NETRA — a landslide early warning system for India · built for Smart India Hackathon</div>
+      <div>Data sources: satellite rainfall, terrain &amp; community reports</div>
+    </div>
+  </footer>
+</section>
+
+<!-- ============================= DASHBOARD ============================= -->
+<section class="page" id="page-dashboard">
+  <div class="wrap section">
+    <div class="section-head">
+      <div class="kicker">Dashboard</div>
+      <h1 style="font-size:1.9rem;">Welcome back</h1>
+      <div class="rule"></div>
+    </div>
+
+    <div class="risk-hero-card" style="margin-bottom:28px;">
+      <div>
+        <div class="place">Your primary location — Kalimpong, West Bengal</div>
+        <div class="level"><span class="badge red"><span class="dot red"></span>Warning</span></div>
+        <div style="color:var(--muted); font-size:0.8rem; margin-top:8px;">Based on rainfall + slope data · updated 4 min ago</div>
+      </div>
+      <div class="tier-mini">
+        <div class="tchip"><div class="tl">Next 24 hours</div><div class="tv" style="color:var(--red);">Elevated</div></div>
+        <div class="tchip"><div class="tl">Next 1 hour</div><div class="tv" style="color:var(--amber);">Watch</div></div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <a href="#safe-route" class="btn btn-accent">Show nearest safe route</a>
+      <a href="#report" class="btn btn-secondary">Report something</a>
+      <a href="#map" class="btn btn-secondary">View live map</a>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3 style="font-size:1rem; margin-bottom:14px;">Your other saved locations</h3>
+        <div id="dash-locations"></div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:1rem; margin-bottom:14px;">Recent alerts</h3>
+        <div id="dash-alerts"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= LIVE MAP ============================= -->
+<section class="page" id="page-map">
+  <div class="wrap section">
+    <div class="section-head">
+      <div class="kicker">Live risk map</div>
+      <h1 style="font-size:1.9rem;">Every hillside region, one glance.</h1>
+      <div class="rule"></div>
+    </div>
+    <div id="leaflet-map"></div>
+    <div class="map-legend">
+      <div class="li"><span class="badge green"><span class="dot green"></span></span> Stable</div>
+      <div class="li"><span class="badge amber"><span class="dot amber"></span></span> Watch</div>
+      <div class="li"><span class="badge red"><span class="dot red"></span></span> Warning</div>
+      <div class="li" style="margin-left:auto;">Tap a marker for rainfall, tier scores, and history</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= ALERTS ============================= -->
+<section class="page" id="page-alerts">
+  <div class="wrap section">
+    <div class="section-head">
+      <div class="kicker">Alerts</div>
+      <h1 style="font-size:1.9rem;">Your alert history</h1>
+      <div class="rule"></div>
+    </div>
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="A">24-hour outlook</button>
+      <button class="filter-btn" data-filter="B">Under 1 hour</button>
+    </div>
+    <div class="card"><div id="alerts-list"></div></div>
+  </div>
+</section>
+
+<!-- ============================= SAFE ROUTE ============================= -->
+<section class="page" id="page-safe-route">
+  <div class="wrap section">
+    <div class="section-head">
+      <div class="kicker">Safe route</div>
+      <h1 style="font-size:1.9rem;">Nearest verified safe zone</h1>
+      <div class="rule"></div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr 320px;">
+      <div id="leaflet-safe-map"></div>
+      <div class="card">
+        <h3 style="font-size:0.95rem; margin-bottom:12px;">Kalimpong Relief Center</h3>
+        <p style="font-size:0.85rem; color:var(--muted); margin-bottom:14px;">Government High School, Kalimpong — verified shelter with capacity for 400, medical post on site.</p>
+        <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:8px;"><span style="color:var(--muted);">Distance</span><strong>2.4 km</strong></div>
+        <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:20px;"><span style="color:var(--muted);">Est. walking time</span><strong>34 min</strong></div>
+        <button class="btn btn-accent" style="width:100%; justify-content:center; margin-bottom:10px;" onclick="markRoadBlocked()">Mark a road as blocked</button>
+        <button class="btn btn-secondary" style="width:100%; justify-content:center;" onclick="sendSafeStatus()">I'm safe / I need help</button>
+        <div id="safe-route-note" style="font-size:0.8rem; color:var(--accent); margin-top:12px;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= REPORT ============================= -->
+<section class="page" id="page-report">
+  <div class="wrap section">
+    <div class="section-head">
+      <div class="kicker">Report a hazard</div>
+      <h1 style="font-size:1.9rem;">Seen a crack, or heard something?</h1>
+      <div class="rule"></div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;">
+      <div class="card">
+        <div class="form-group">
+          <label>What did you notice?</label>
+          <select id="report-category">
+            <option>Crack in the ground or wall</option>
+            <option>Rumbling or unusual sound</option>
+            <option>Muddy or discoloured water</option>
+            <option>Blocked or damaged road</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="report-notes" placeholder="Briefly describe what you saw..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Photo (optional)</label>
+          <div class="file-drop" onclick="document.getElementById('report-photo').click()">
+            <div id="file-drop-label">Tap to add a photo</div>
+            <img id="photo-preview" style="display:none;">
+          </div>
+          <input type="file" id="report-photo" accept="image/*" style="display:none;">
+        </div>
+        <div class="form-group">
+          <label>Location (tap the map to place your pin)</label>
+          <div id="leaflet-report-map"></div>
+        </div>
+        <button class="btn btn-accent" style="width:100%; justify-content:center;" onclick="submitReport()">Submit report</button>
+        <div id="report-status" style="font-size:0.82rem; color:var(--accent); margin-top:10px;"></div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:0.95rem; margin-bottom:8px;">Why this helps</h3>
+        <p style="font-size:0.86rem; color:var(--muted); margin-bottom:16px;">Your report is checked alongside rainfall and ground-movement data. If enough nearby reports and rainfall spikes line up, the system escalates the area to an imminent Tier B alert automatically.</p>
+        <h3 style="font-size:0.95rem; margin-bottom:8px;">If you're offline</h3>
+        <p style="font-size:0.86rem; color:var(--muted);">Your report is saved on your device and will upload automatically the moment you're back in signal range — nothing is lost.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= COMMUNITY ============================= -->
+<section class="page" id="page-community">
+  <div class="wrap section">
+    <div class="section-head">
+      <div class="kicker">Community map</div>
+      <h1 style="font-size:1.9rem;">Reports from people nearby</h1>
+      <div class="rule"></div>
+    </div>
+    <div class="grid grid-3" id="community-grid"></div>
+  </div>
+</section>
+
+<!-- ============================= AUTHORITY ============================= -->
+<section class="page" id="page-authority">
+  <div class="wrap section">
+    <div class="section-head">
+      <div class="kicker">Authority dashboard</div>
+      <h1 style="font-size:1.9rem;">District Disaster Management view</h1>
+      <div class="rule"></div>
+    </div>
+    <div class="card" style="margin-bottom:20px; overflow-x:auto;">
+      <table>
+        <thead><tr><th>Region</th><th>State</th><th>24hr outlook</th><th>1hr nowcast</th><th>Rainfall</th><th>Updated</th><th></th></tr></thead>
+        <tbody id="authority-table"></tbody>
+      </table>
+    </div>
+    <button class="btn btn-secondary" onclick="downloadBulletin()">Download today's bulletin (JSON)</button>
+  </div>
+</section>
+
+<!-- ============================= SETTINGS ============================= -->
+<section class="page" id="page-settings">
+  <div class="wrap section">
+    <div class="section-head">
+      <div class="kicker">Settings</div>
+      <h1 style="font-size:1.9rem;">Preferences</h1>
+      <div class="rule"></div>
+    </div>
+    <div class="card" style="margin-bottom:20px;">
+      <div class="settings-row">
+        <div><div class="lbl">Theme</div><div class="desc">Switch between dark and light mode</div></div>
+        <div class="toggle" id="settings-theme-toggle"><div class="knob"></div></div>
+      </div>
+      <div class="settings-row">
+        <div><div class="lbl">Language</div><div class="desc">Applies to navigation and key headings (demo)</div></div>
+        <div class="seg" id="lang-seg">
+          <button class="active" data-lang="en">English</button>
+          <button data-lang="hi">हिंदी</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div><div class="lbl">Push notifications</div><div class="desc">Receive alerts on this device</div></div>
+        <div class="toggle on" id="toggle-push"><div class="knob"></div></div>
+      </div>
+      <div class="settings-row">
+        <div><div class="lbl">SMS fallback</div><div class="desc">For low-connectivity areas</div></div>
+        <div class="toggle on" id="toggle-sms"><div class="knob"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="font-size:0.95rem; margin-bottom:14px;">Saved locations</h3>
+      <div id="settings-locations"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ============================= DATA ============================= */
+const DISTRICTS = [
+  {id:'darjeeling', name:'Darjeeling', state:'West Bengal', lat:27.0410, lng:88.2636, tierA:'Watch', tierB:'Stable', rainfall:'62 mm/24h', updated:'8 min ago'},
+  {id:'kalimpong', name:'Kalimpong', state:'West Bengal', lat:27.0669, lng:88.4711, tierA:'Warning', tierB:'Watch', rainfall:'94 mm/24h', updated:'4 min ago'},
+  {id:'wayanad', name:'Wayanad', state:'Kerala', lat:11.6854, lng:76.1320, tierA:'Watch', tierB:'Stable', rainfall:'48 mm/24h', updated:'12 min ago'},
+  {id:'idukki', name:'Idukki', state:'Kerala', lat:9.8490, lng:77.1100, tierA:'Stable', tierB:'Stable', rainfall:'21 mm/24h', updated:'15 min ago'},
+  {id:'munsiyari', name:'Munsiyari', state:'Uttarakhand', lat:30.0668, lng:80.2373, tierA:'Watch', tierB:'Stable', rainfall:'55 mm/24h', updated:'6 min ago'},
+  {id:'gangtok', name:'Gangtok', state:'Sikkim', lat:27.3389, lng:88.6065, tierA:'Stable', tierB:'Stable', rainfall:'18 mm/24h', updated:'20 min ago'},
+  {id:'shillong', name:'Shillong', state:'Meghalaya', lat:25.5788, lng:91.8933, tierA:'Warning', tierB:'Watch', rainfall:'101 mm/24h', updated:'3 min ago'},
+  {id:'itanagar', name:'Itanagar', state:'Arunachal Pradesh', lat:27.0844, lng:93.6053, tierA:'Stable', tierB:'Stable', rainfall:'14 mm/24h', updated:'25 min ago'},
+  {id:'shimla', name:'Shimla', state:'Himachal Pradesh', lat:31.1048, lng:77.1734, tierA:'Watch', tierB:'Stable', rainfall:'38 mm/24h', updated:'10 min ago'}
+];
+
+const ALERTS = [
+  {tier:'B', place:'Kalimpong', msg:'Rainfall intensity spiked and 2 nearby reports confirmed ground movement.', time:'4 min ago', level:'red'},
+  {tier:'A', place:'Kalimpong', msg:'24-hour outlook escalated to Elevated based on cumulative rainfall.', time:'2 hr ago', level:'amber'},
+  {tier:'B', place:'Shillong', msg:'Short-burst rainfall spike detected; monitoring for escalation.', time:'3 min ago', level:'amber'},
+  {tier:'A', place:'Darjeeling', msg:'Soil moisture trending upward, risk raised to Watch.', time:'8 min ago', level:'amber'},
+  {tier:'A', place:'Munsiyari', msg:'Rainfall crossed the 24-hour threshold for this terrain type.', time:'6 min ago', level:'amber'},
+  {tier:'A', place:'Wayanad', msg:'Elevated soil moisture observed after sustained monsoon rainfall.', time:'12 min ago', level:'amber'}
+];
+
+const riskColor = t => t === 'Warning' ? 'var(--red)' : t === 'Watch' ? 'var(--amber)' : 'var(--green)';
+const riskHex = t => t === 'Warning' ? '#C1462F' : t === 'Watch' ? '#D9A441' : '#4C9A6B';
+const badgeClass = t => t === 'Warning' ? 'red' : t === 'Watch' ? 'amber' : 'green';
+
+/* ============================= ROUTING ============================= */
+const ROUTES = [
+  {id:'home', label:'Home'},
+  {id:'dashboard', label:'Dashboard'},
+  {id:'map', label:'Live Map'},
+  {id:'alerts', label:'Alerts'},
+  {id:'safe-route', label:'Safe Route'},
+  {id:'report', label:'Report'},
+  {id:'community', label:'Community'},
+  {id:'authority', label:'Authority'},
+  {id:'settings', label:'Settings'}
+];
+
+function buildNav(){
+  const desktop = document.getElementById('navlinks-desktop');
+  const mobile = document.getElementById('mobile-nav');
+  desktop.innerHTML = ROUTES.map(r => `<a href="#${r.id}" data-route="${r.id}">${r.label}</a>`).join('');
+  mobile.innerHTML = ROUTES.map(r => `<a href="#${r.id}" data-route="${r.id}">${r.label}</a>`).join('');
+}
+
+let mapInitialized = false, safeMapInitialized = false, reportMapInitialized = false;
+let reportMarker = null;
+
+function render(){
+  const hash = (location.hash || '#home').replace('#','');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + hash) || document.getElementById('page-home');
+  target.classList.add('active');
+
+  document.querySelectorAll('[data-route]').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('data-route') === hash);
+  });
+
+  document.getElementById('mobile-nav').classList.remove('open');
+
+  if(hash === 'dashboard') renderDashboard();
+  if(hash === 'map'){ initLeafletMap(); setTimeout(()=>{ if(window._map) window._map.invalidateSize(); }, 50); }
+  if(hash === 'alerts') renderAlerts('all');
+  if(hash === 'safe-route'){ initSafeMap(); setTimeout(()=>{ if(window._safeMap) window._safeMap.invalidateSize(); }, 50); }
+  if(hash === 'report'){ initReportMap(); setTimeout(()=>{ if(window._reportMap) window._reportMap.invalidateSize(); }, 50); }
+  if(hash === 'community') renderCommunity();
+  if(hash === 'authority') renderAuthority();
+  if(hash === 'settings') renderSettings();
+
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', render);
+
+/* ============================= DASHBOARD ============================= */
+function renderDashboard(){
+  const others = DISTRICTS.filter(d => d.id !== 'kalimpong').slice(0,4);
+  document.getElementById('dash-locations').innerHTML = others.map(d => `
+    <div class="loc-row">
+      <div><div style="font-weight:500;">${d.name}</div><div style="font-size:0.78rem; color:var(--muted);">${d.state}</div></div>
+      <span class="badge ${badgeClass(d.tierA)}"><span class="dot ${badgeClass(d.tierA)}"></span>${d.tierA}</span>
+    </div>`).join('');
+
+  document.getElementById('dash-alerts').innerHTML = ALERTS.slice(0,3).map(a => `
+    <div class="loc-row">
+      <div><div style="font-weight:500; font-size:0.88rem;">${a.place}</div><div style="font-size:0.78rem; color:var(--muted); max-width:220px;">${a.msg}</div></div>
+      <div style="font-size:0.76rem; color:var(--muted); white-space:nowrap;">${a.time}</div>
+    </div>`).join('');
+}
+
+/* ============================= LIVE MAP ============================= */
+function initLeafletMap(){
+  if(mapInitialized) return;
+  mapInitialized = true;
+  const map = L.map('leaflet-map').setView([23.5, 84], 4.6);
+  window._map = map;
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+  }).addTo(map);
+
+  DISTRICTS.forEach(d => {
+    const color = riskHex(d.tierA);
+    const marker = L.circleMarker([d.lat, d.lng], {
+      radius: 11, fillColor: color, color: '#0F1C17', weight: 2, fillOpacity: 0.95
+    }).addTo(map);
+    marker.bindPopup(`
+      <div class="popup-title">${d.name}, ${d.state}</div>
+      <div style="font-size:12px; margin-bottom:4px;">24hr outlook: <strong>${d.tierA}</strong></div>
+      <div style="font-size:12px; margin-bottom:4px;">1hr nowcast: <strong>${d.tierB}</strong></div>
+      <div style="font-size:12px; margin-bottom:4px;">Rainfall: ${d.rainfall}</div>
+      <div style="font-size:11px; color:#9CAFA2;">Updated ${d.updated}</div>
+    `);
+  });
+}
+
+/* ============================= SAFE ROUTE MAP ============================= */
+function initSafeMap(){
+  if(safeMapInitialized) return;
+  safeMapInitialized = true;
+  const start = [27.0669, 88.4711]; // Kalimpong
+  const shelter = [27.0755, 88.4790]; // nearby shelter (mock)
+  const map = L.map('leaflet-safe-map').setView([27.071, 88.475], 14);
+  window._safeMap = map;
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+  }).addTo(map);
+  L.circleMarker(start, {radius:9, fillColor:'#C1462F', color:'#0F1C17', weight:2, fillOpacity:0.95}).addTo(map).bindPopup('You are here');
+  L.circleMarker(shelter, {radius:9, fillColor:'#4C9A6B', color:'#0F1C17', weight:2, fillOpacity:0.95}).addTo(map).bindPopup('Kalimpong Relief Center');
+  L.polyline([start, [27.070,88.473], [27.073,88.477], shelter], {color:'#6FBF8F', weight:4, opacity:0.85, dashArray:'1,8', lineCap:'round'}).addTo(map);
+}
+function markRoadBlocked(){
+  document.getElementById('safe-route-note').textContent = 'Thanks — this road segment has been marked blocked and the route above will update for other nearby users.';
+}
+function sendSafeStatus(){
+  document.getElementById('safe-route-note').textContent = 'Your status has been shared with the local authority contact for this area.';
+}
+
+/* ============================= REPORT ============================= */
+function initReportMap(){
+  if(reportMapInitialized) return;
+  reportMapInitialized = true;
+  const map = L.map('leaflet-report-map').setView([27.0669, 88.4711], 13);
+  window._reportMap = map;
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+  }).addTo(map);
+  map.on('click', function(e){
+    if(reportMarker) map.removeLayer(reportMarker);
+    reportMarker = L.marker(e.latlng).addTo(map);
+    window._reportLatLng = e.latlng;
+  });
+}
+
+document.getElementById('report-photo').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const img = document.getElementById('photo-preview');
+    img.src = ev.target.result;
+    img.style.display = 'block';
+    document.getElementById('file-drop-label').textContent = 'Photo attached — tap to change';
+    window._reportPhotoData = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+function getReports(){
+  try{ return JSON.parse(localStorage.getItem('bhunetra_reports') || '[]'); }catch(e){ return []; }
+}
+function saveReports(list){ localStorage.setItem('bhunetra_reports', JSON.stringify(list)); }
+
+function submitReport(){
+  const category = document.getElementById('report-category').value;
+  const notes = document.getElementById('report-notes').value;
+  const photo = window._reportPhotoData || null;
+  const loc = window._reportLatLng || {lat:27.0669,lng:88.4711};
+  const reports = getReports();
+  reports.unshift({
+    id: Date.now(), category, notes, photo,
+    lat: loc.lat, lng: loc.lng,
+    time: 'Just now', confirms: 0
+  });
+  saveReports(reports);
+  document.getElementById('report-status').textContent = 'Report submitted — it now appears on the community map.';
+  document.getElementById('report-notes').value = '';
+  document.getElementById('photo-preview').style.display = 'none';
+  document.getElementById('file-drop-label').textContent = 'Tap to add a photo';
+  window._reportPhotoData = null;
+}
+
+/* ============================= COMMUNITY ============================= */
+const SEED_REPORTS = [
+  {id:'seed1', category:'Crack in the ground or wall', notes:'Small crack appeared near the school compound wall after last night\\'s rain.', photo:null, time:'1 hr ago', confirms:3},
+  {id:'seed2', category:'Muddy or discoloured water', notes:'Stream near Pine Road has turned muddy since this morning.', photo:null, time:'3 hr ago', confirms:5},
+  {id:'seed3', category:'Blocked or damaged road', notes:'Minor debris on the road near the relief center, still passable on foot.', photo:null, time:'6 hr ago', confirms:2}
+];
+
+function renderCommunity(){
+  const userReports = getReports();
+  const all = [...userReports, ...SEED_REPORTS];
+  document.getElementById('community-grid').innerHTML = all.map(r => `
+    <div class="card report-card">
+      ${r.photo ? `<img src="${r.photo}">` : `<div style="height:140px; border-radius:8px; background:var(--bg-elev2); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:0.78rem;">No photo attached</div>`}
+      <div style="font-weight:600; font-size:0.9rem;">${r.category}</div>
+      <div style="font-size:0.85rem; color:var(--muted);">${r.notes || 'No additional notes.'}</div>
+      <div class="report-meta">
+        <span>${r.time}</span>
+        <button class="confirm-btn" onclick="confirmReport('${r.id}', this)">✓ Confirm (${r.confirms})</button>
+      </div>
+    </div>
+  `).join('');
+}
+function confirmReport(id, btn){
+  btn.classList.add('confirmed');
+  btn.textContent = '✓ Confirmed';
+}
+
+/* ============================= ALERTS ============================= */
+function renderAlerts(filter){
+  const list = filter === 'all' ? ALERTS : ALERTS.filter(a => a.tier === filter);
+  document.getElementById('alerts-list').innerHTML = list.map(a => `
+    <div class="alert-item">
+      <div class="alert-icon" style="background:rgba(${a.level==='red'?'193,70,47':'217,164,65'},0.15);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l9 18H3L12 3Z" stroke="var(--${a.level})" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 10v4M12 17h.01" stroke="var(--${a.level})" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div style="flex:1;">
+        <div style="display:flex; justify-content:space-between; gap:10px;">
+          <div style="font-weight:600; font-size:0.92rem;">${a.place} <span class="badge ${a.level}" style="margin-left:8px;">${a.tier === 'A' ? '24hr outlook' : 'Under 1hr'}</span></div>
+          <div style="font-size:0.78rem; color:var(--muted); white-space:nowrap;">${a.time}</div>
+        </div>
+        <div style="font-size:0.86rem; color:var(--muted); margin-top:4px;">${a.msg}</div>
+      </div>
+    </div>
+  `).join('');
+}
+document.addEventListener('click', function(e){
+  if(e.target.classList.contains('filter-btn')){
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    renderAlerts(e.target.getAttribute('data-filter'));
+  }
+});
+
+/* ============================= AUTHORITY ============================= */
+function renderAuthority(){
+  document.getElementById('authority-table').innerHTML = DISTRICTS.map(d => `
+    <tr>
+      <td>${d.name}</td><td>${d.state}</td>
+      <td><span class="badge ${badgeClass(d.tierA)}"><span class="dot ${badgeClass(d.tierA)}"></span>${d.tierA}</span></td>
+      <td><span class="badge ${badgeClass(d.tierB)}"><span class="dot ${badgeClass(d.tierB)}"></span>${d.tierB}</span></td>
+      <td>${d.rainfall}</td><td>${d.updated}</td>
+      <td><button class="btn btn-sm btn-secondary" onclick="alert('Confirmed by authority for ${d.name}')">Confirm</button></td>
+    </tr>
+  `).join('');
+}
+function downloadBulletin(){
+  const blob = new Blob([JSON.stringify({generated: new Date().toISOString(), districts: DISTRICTS}, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'bhunetra-bulletin.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ============================= SETTINGS ============================= */
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('bhunetra_theme', theme);
+  const on = theme === 'light';
+  const t = document.getElementById('settings-theme-toggle');
+  if(t) t.classList.toggle('on', on);
+}
+function renderSettings(){
+  const theme = localStorage.getItem('bhunetra_theme') || 'dark';
+  document.getElementById('settings-theme-toggle').classList.toggle('on', theme === 'light');
+
+  document.getElementById('settings-locations').innerHTML = DISTRICTS.slice(0,4).map(d => `
+    <div class="loc-row"><div>${d.name}, ${d.state}</div><button class="btn btn-sm btn-secondary" onclick="this.closest('.loc-row').remove()">Remove</button></div>
+  `).join('');
+}
+document.getElementById('settings-theme-toggle')?.addEventListener('click', function(){
+  const current = localStorage.getItem('bhunetra_theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+});
+document.getElementById('theme-toggle-btn').addEventListener('click', function(){
+  const current = localStorage.getItem('bhunetra_theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+});
+['toggle-push','toggle-sms'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('click', () => el.classList.toggle('on'));
+});
+
+const I18N = {
+  en: {Home:'Home', Dashboard:'Dashboard', 'Live Map':'Live Map', Alerts:'Alerts', 'Safe Route':'Safe Route', Report:'Report', Community:'Community', Authority:'Authority', Settings:'Settings'},
+  hi: {Home:'होम', Dashboard:'डैशबोर्ड', 'Live Map':'लाइव मैप', Alerts:'अलर्ट', 'Safe Route':'सुरक्षित मार्ग', Report:'रिपोर्ट करें', Community:'समुदाय', Authority:'प्राधिकरण', Settings:'सेटिंग्स'}
+};
+document.getElementById('lang-seg')?.addEventListener('click', function(e){
+  if(e.target.tagName !== 'BUTTON') return;
+  document.querySelectorAll('#lang-seg button').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  const lang = e.target.getAttribute('data-lang');
+  document.querySelectorAll('[data-route]').forEach(a => {
+    const route = ROUTES.find(r => r.id === a.getAttribute('data-route'));
+    a.textContent = I18N[lang][route.label] || route.label;
+  });
+});
+
+/* ============================= MOBILE NAV ============================= */
+document.getElementById('hamburger-btn').addEventListener('click', function(){
+  document.getElementById('mobile-nav').classList.toggle('open');
+});
+
+/* ============================= INIT ============================= */
+(function init(){
+  applyTheme(localStorage.getItem('bhunetra_theme') || 'dark');
+  buildNav();
+  render();
+})();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
+  });
+}
+</script>
+</body>
+</html>
