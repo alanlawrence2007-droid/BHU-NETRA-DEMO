@@ -32,7 +32,7 @@ html{scroll-behavior:smooth;}
 body{background:var(--bg); color:var(--text); font-family:var(--font-body); line-height:1.5; min-height:100vh;}
 h1,h2,h3,.font-head{font-family:var(--font-head); letter-spacing:-0.01em;}
 a{color:inherit;}
-.wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+.wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
 button{font-family:inherit; cursor:pointer;}
 ::-webkit-scrollbar{width:10px;} ::-webkit-scrollbar-thumb{background:var(--border); border-radius:6px;}
 
@@ -95,6 +95,21 @@ html[data-theme="light"] .hero-photo::after{
 .grid-4{grid-template-columns:repeat(4,1fr);}
 @media (max-width:900px){ .grid-3,.grid-4{grid-template-columns:1fr 1fr;} }
 @media (max-width:620px){ .grid-3,.grid-4,.grid-2{grid-template-columns:1fr;} }
+
+.safe-route-grid{ grid-template-columns:1fr 320px; }
+.report-grid{ grid-template-columns:1fr 1fr; }
+@media (max-width:760px){
+  .safe-route-grid, .report-grid{ grid-template-columns:1fr; }
+}
+
+/* Safety net: never allow any element to force horizontal overflow on mobile */
+html, body{ overflow-x:hidden; max-width:100%; }
+img, table{ max-width:100%; }
+
+@media (max-width:480px){
+  .section-head h1, .section-head h2{ font-size:1.6rem; }
+  #page-home h1{ font-size:2rem; }
+}
 
 .btn{display:inline-flex; align-items:center; gap:8px; border-radius:8px; padding:11px 20px; font-weight:600; font-size:0.9rem; border:none; text-decoration:none;}
 .btn-primary{background:var(--text); color:var(--bg);}
@@ -371,7 +386,7 @@ tr:last-child td{border-bottom:none;}
       <h1 style="font-size:1.9rem;">Nearest verified safe zone</h1>
       <div class="rule"></div>
     </div>
-    <div class="grid" style="grid-template-columns:1fr 320px;">
+    <div class="grid safe-route-grid">
       <div id="leaflet-safe-map"></div>
       <div class="card">
         <h3 style="font-size:0.95rem; margin-bottom:12px;">Kalimpong Relief Center</h3>
@@ -394,7 +409,7 @@ tr:last-child td{border-bottom:none;}
       <h1 style="font-size:1.9rem;">Seen a crack, or heard something?</h1>
       <div class="rule"></div>
     </div>
-    <div class="grid" style="grid-template-columns:1fr 1fr;">
+    <div class="grid report-grid">
       <div class="card">
         <div class="form-group">
           <label>What did you notice?</label>
