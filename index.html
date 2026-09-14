@@ -571,40 +571,40 @@ tr:last-child td{border-bottom:none;}
       <div class="wis-zone-row" id="wis-zone-row" role="tablist" aria-label="Select zone"></div>
 
       <div class="wis-presets">
-        <button type="button" class="wis-preset-btn" data-preset="normal">Normal</button>
-        <button type="button" class="wis-preset-btn" data-preset="heavyRain">Heavy Rain</button>
-        <button type="button" class="wis-preset-btn" data-preset="cloudburst">Cloudburst</button>
-        <button type="button" class="wis-preset-btn" data-preset="saturatedSoil">Saturated Soil</button>
-        <button type="button" class="wis-preset-btn" data-preset="roadCut">Road Cut</button>
+        <button type="button" class="wis-preset-btn" data-preset="normal" data-i18n="Normal">Normal</button>
+        <button type="button" class="wis-preset-btn" data-preset="heavyRain" data-i18n="Heavy Rain">Heavy Rain</button>
+        <button type="button" class="wis-preset-btn" data-preset="cloudburst" data-i18n="Cloudburst">Cloudburst</button>
+        <button type="button" class="wis-preset-btn" data-preset="saturatedSoil" data-i18n="Saturated Soil">Saturated Soil</button>
+        <button type="button" class="wis-preset-btn" data-preset="roadCut" data-i18n="Road Cut">Road Cut</button>
       </div>
 
       <div class="wis-body">
 
         <div class="wis-card wis-sliders">
-          <h3 class="wis-card-title">Conditions</h3>
+          <h3 class="wis-card-title" data-i18n="Conditions">Conditions</h3>
 
           <div class="wis-slider-group">
-            <div class="wis-slider-label"><span>Rainfall intensity</span><span class="wis-slider-value" id="wis-val-rainfall">0 mm/hr</span></div>
+            <div class="wis-slider-label"><span data-i18n="Rainfall intensity">Rainfall intensity</span><span class="wis-slider-value" id="wis-val-rainfall">0 mm/hr</span></div>
             <input type="range" id="wis-rainfall" min="0" max="120" step="1" value="0" class="wis-slider">
           </div>
 
           <div class="wis-slider-group">
-            <div class="wis-slider-label"><span>Forecast duration</span><span class="wis-slider-value" id="wis-val-duration">0 h</span></div>
+            <div class="wis-slider-label"><span data-i18n="Forecast duration">Forecast duration</span><span class="wis-slider-value" id="wis-val-duration">0 h</span></div>
             <input type="range" id="wis-duration" min="0" max="24" step="1" value="0" class="wis-slider">
           </div>
 
           <div class="wis-slider-group">
-            <div class="wis-slider-label"><span>Antecedent soil moisture</span><span class="wis-slider-value" id="wis-val-moisture">0%</span></div>
+            <div class="wis-slider-label"><span data-i18n="Antecedent soil moisture">Antecedent soil moisture</span><span class="wis-slider-value" id="wis-val-moisture">0%</span></div>
             <input type="range" id="wis-moisture" min="0" max="100" step="1" value="0" class="wis-slider">
           </div>
 
           <div class="wis-slider-group">
-            <div class="wis-slider-label"><span>Slope angle</span><span class="wis-slider-value" id="wis-val-slope">0°</span></div>
+            <div class="wis-slider-label"><span data-i18n="Slope angle">Slope angle</span><span class="wis-slider-value" id="wis-val-slope">0°</span></div>
             <input type="range" id="wis-slope" min="0" max="60" step="1" value="0" class="wis-slider">
           </div>
 
           <div class="wis-slider-group">
-            <div class="wis-slider-label"><span>Vegetation cover</span><span class="wis-slider-value" id="wis-val-vegetation">0%</span></div>
+            <div class="wis-slider-label"><span data-i18n="Vegetation cover">Vegetation cover</span><span class="wis-slider-value" id="wis-val-vegetation">0%</span></div>
             <input type="range" id="wis-vegetation" min="0" max="100" step="1" value="0" class="wis-slider">
           </div>
         </div>
@@ -612,27 +612,27 @@ tr:last-child td{border-bottom:none;}
         <div class="wis-outputs">
 
           <div class="wis-card wis-risk-card">
-            <h3 class="wis-card-title">Risk score</h3>
+            <h3 class="wis-card-title" data-i18n="Risk score">Risk score</h3>
             <div class="wis-risk-display">
               <div class="wis-risk-number" id="wis-risk-score">0</div>
               <div class="wis-risk-meta">
-                <span class="wis-badge" id="wis-alert-badge">Monitor</span>
+                <span class="wis-badge" id="wis-alert-badge" data-i18n="Monitor">Monitor</span>
                 <div class="wis-risk-bar-track"><div class="wis-risk-bar-fill" id="wis-risk-bar"></div></div>
               </div>
             </div>
           </div>
 
           <div class="wis-card wis-timeline-card">
-            <h3 class="wis-card-title">Mini timeline</h3>
+            <h3 class="wis-card-title" data-i18n="Mini timeline">Mini timeline</h3>
             <div class="wis-timeline">
-              <div class="wis-timeline-point"><div class="wis-timeline-label">Now</div><div class="wis-timeline-value" id="wis-tl-now">0</div></div>
+              <div class="wis-timeline-point"><div class="wis-timeline-label" data-i18n="Now">Now</div><div class="wis-timeline-value" id="wis-tl-now">0</div></div>
               <div class="wis-timeline-point"><div class="wis-timeline-label">+3h</div><div class="wis-timeline-value" id="wis-tl-3h">0</div></div>
               <div class="wis-timeline-point"><div class="wis-timeline-label">+6h</div><div class="wis-timeline-value" id="wis-tl-6h">0</div></div>
             </div>
           </div>
 
           <div class="wis-card wis-explain-card">
-            <h3 class="wis-card-title">Top contributors</h3>
+            <h3 class="wis-card-title" data-i18n="Top contributors">Top contributors</h3>
             <div class="wis-contributors" id="wis-contributors"></div>
           </div>
 
@@ -640,7 +640,7 @@ tr:last-child td{border-bottom:none;}
       </div>
 
       <div class="wis-apply-row">
-        <button type="button" class="wis-apply-btn" id="wis-apply-btn">Apply to App</button>
+        <button type="button" class="wis-apply-btn" id="wis-apply-btn" data-i18n="Apply to App">Apply to App</button>
         <span class="wis-apply-status" id="wis-apply-status"></span>
       </div>
 
@@ -1187,7 +1187,38 @@ const HI = {
   'SMS fallback':'एसएमएस फ़ॉलबैक',
   'For low-connectivity areas':'कम-कनेक्टिविटी वाले क्षेत्रों के लिए',
   'Saved locations':'सहेजे गए स्थान',
-  'Remove':'हटाएं'
+  'Remove':'हटाएं',
+  // What-If Simulator
+  'What-If Simulator':'व्हाट-इफ़ सिम्युलेटर',
+  'Explore how conditions change risk':'देखें कि परिस्थितियां जोखिम को कैसे बदलती हैं',
+  'Normal':'सामान्य',
+  'Heavy Rain':'भारी बारिश',
+  'Cloudburst':'बादल फटना',
+  'Saturated Soil':'संतृप्त मिट्टी',
+  'Road Cut':'सड़क कटाव',
+  'Conditions':'परिस्थितियां',
+  'Rainfall intensity':'वर्षा तीव्रता',
+  'Forecast duration':'पूर्वानुमान अवधि',
+  'Antecedent soil moisture':'पूर्ववर्ती मिट्टी की नमी',
+  'Slope angle':'ढलान कोण',
+  'Vegetation cover':'वनस्पति आवरण',
+  'Risk score':'जोखिम स्कोर',
+  'Monitor':'निगरानी करें',
+  'Prepare':'तैयार रहें',
+  'Restrict':'प्रतिबंधित करें',
+  'Act':'कार्रवाई करें',
+  'Mini timeline':'लघु समयरेखा',
+  'Now':'अभी',
+  'Top contributors':'शीर्ष योगदानकर्ता',
+  'High rainfall':'भारी वर्षा',
+  'Prolonged rain':'लंबे समय तक बारिश',
+  'Saturated soil':'संतृप्त मिट्टी',
+  'Steep slope':'तीव्र ढलान',
+  'Low vegetation':'कम वनस्पति',
+  'Apply to App':'ऐप में लागू करें',
+  'Applied to':'में लागू किया गया',
+  'risk':'जोखिम',
+  'Could not apply — landslideApp.updateZoneRisk not available.':'लागू नहीं हो सका — landslideApp.updateZoneRisk उपलब्ध नहीं है।'
 };
 let currentLang = localStorage.getItem('bhunetra_lang') || 'en';
 function t(str){ return currentLang === 'hi' ? (HI[str] || str) : str; }
@@ -1259,6 +1290,9 @@ document.getElementById('lang-seg')?.addEventListener('click', function(e){
     finalRisk = Math.max(0, Math.min(100, Math.round(finalRisk)));
 
     // 4. Alert level thresholds — CUSTOMIZE THRESHOLDS HERE.
+    // NOTE: alertLevel is kept as a stable English key ('Monitor'/'Prepare'/
+    // 'Restrict'/'Act') for internal logic (see whatIfAlertToTier above) —
+    // it is only translated for display via t() at render time.
     let alertLevel, colorVar;
     if (finalRisk <= 30)      { alertLevel = 'Monitor';  colorVar = 'var(--green)'; }
     else if (finalRisk <= 60) { alertLevel = 'Prepare';  colorVar = 'var(--wis-yellow)'; }
@@ -1322,13 +1356,14 @@ document.getElementById('lang-seg')?.addEventListener('click', function(e){
     const result = computeRisk(state);
 
     els.valRainfall.textContent = state.rainfall + ' mm/hr';
-    els.valDuration.textContent = state.duration + ' h';
+    els.valDuration.textContent = state.duration + ' ' + t('h');
     els.valMoisture.textContent = state.moisture + '%';
     els.valSlope.textContent = state.slope + '°';
     els.valVegetation.textContent = state.vegetation + '%';
 
     els.riskScore.textContent = result.finalRisk;
-    els.alertBadge.textContent = result.alertLevel;
+    els.alertBadge.textContent = t(result.alertLevel);
+    els.alertBadge.setAttribute('data-i18n', result.alertLevel);
     els.riskBar.style.width = result.finalRisk + '%';
     els.container.style.setProperty('--wis-risk-color', result.colorVar);
 
@@ -1338,7 +1373,7 @@ document.getElementById('lang-seg')?.addEventListener('click', function(e){
 
     els.contributors.innerHTML = result.contributions.map(c => `
       <div class="wis-contributor">
-        <div class="wis-contributor-top"><span class="wis-contributor-name">${c.name}</span><span class="wis-contributor-pct">${c.value}%</span></div>
+        <div class="wis-contributor-top"><span class="wis-contributor-name">${t(c.name)}</span><span class="wis-contributor-pct">${c.value}%</span></div>
         <div class="wis-contributor-bar-track"><div class="wis-contributor-bar-fill" style="width:${c.value}%"></div></div>
       </div>`).join('');
 
@@ -1435,9 +1470,9 @@ document.getElementById('lang-seg')?.addEventListener('click', function(e){
       // ====================================================================
       if (app && typeof app.updateZoneRisk === 'function' && state.zoneId) {
         app.updateZoneRisk(state.zoneId, result.finalRisk, result.alertLevel);
-        els.applyStatus.textContent = `Applied to ${state.zoneId} — risk ${result.finalRisk} (${result.alertLevel})`;
+        els.applyStatus.textContent = `${t('Applied to')} ${state.zoneId} — ${t('risk')} ${result.finalRisk} (${t(result.alertLevel)})`;
       } else {
-        els.applyStatus.textContent = 'Could not apply — landslideApp.updateZoneRisk not available.';
+        els.applyStatus.textContent = t('Could not apply — landslideApp.updateZoneRisk not available.');
       }
       els.applyStatus.classList.add('wis-show');
       clearTimeout(wireOnce._t);
