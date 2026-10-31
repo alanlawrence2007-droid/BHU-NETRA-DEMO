@@ -41,12 +41,14 @@ Most warning systems only say that a whole district is at risk. They don't tell 
 | Community map | Reports from people nearby |
 | Authority dashboard | District-level view with 24-hour outlook, 1-hour nowcast and rainfall per region, plus a downloadable daily bulletin (JSON) |
 | Settings | Dark/light theme, English and Hindi, push and SMS alerts, saved locations |
+BHU-NETRA is also an installable web app (PWA). Open the demo in Chrome and choose "Install" to add it to your phone or desktop.
 
 ## Tech stack
 
-- Frontend: HTML, CSS, JavaScript
+- Frontend: HTML, CSS, JavaScript (Progressive Web App with a service worker)
 - Hosting: Vercel
 - Built with the help of Claude
+
 
 ## Run it locally
 
